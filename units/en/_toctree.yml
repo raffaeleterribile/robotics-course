@@ -5,3 +5,18 @@
   - local: unit0/2
     title: Robotics Hardware
 
+- title: "1. Robot Learning Tutorial"
+  sections:
+  - local: unit1/1
+    title: Abstract
+
+- title: "2. Introduction"
+  sections:
+  - local: unit2/1
+    title: Introduction to Robot Learning
+
+- title: "3. Classical Robotics"
+  sections:
+  - local: unit3/1
+    title: Classical Robotics Foundations
+
