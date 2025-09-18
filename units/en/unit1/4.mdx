@@ -184,11 +184,132 @@ Compare this to traditional robotics data handling, which often requires:
 
 LeRobotDataset **standardizes and simplifies** all of this!
 
+
 ## Section Quiz
 
-Test your understanding of LeRobotDataset and robotics data handling:
+Test your understanding of LeRobot and its role in robot learning:
 
-### 1. What is the primary purpose of the `delta_timestamps` parameter in LeRobotDataset?
+### 1. What makes LeRobot different from traditional robotics libraries?
+
+<Question
+	choices={[
+		{
+			text: "It only works with simulation environments.",
+			explain: "LeRobot actually focuses on real-world robots and supports many physical platforms."
+		},
+		{
+			text: "It provides end-to-end integration across the entire robotics stack with state-of-the-art learning algorithms.",
+			explain: "LeRobot's key innovation is combining hardware control, data handling, and learning algorithms in one unified library.",
+            correct: true
+		},
+		{
+			text: "It requires expensive industrial robots to function.",
+			explain: "LeRobot focuses on accessible, low-cost robots to democratize robotics."
+		},
+        {
+			text: "It only supports classical control methods.",
+			explain: "LeRobot specifically focuses on learning-based approaches, not classical control."
+		}
+	]}
+/>
+
+### 2. Which of the following is NOT a key component of LeRobot's approach?
+
+<Question
+	choices={[
+		{
+			text: "Unified low-level robot configuration handling",
+			explain: "This is indeed a key component that enables cross-platform compatibility."
+		},
+		{
+			text: "Native robotics dataset format (LeRobotDataset)",
+			explain: "LeRobotDataset is a central innovation of the library."
+		},
+		{
+			text: "Requiring expert knowledge for each new robot platform",
+			explain: "This is actually what LeRobot aims to eliminate - it reduces the expertise barrier.",
+            correct: true
+		},
+        {
+			text: "State-of-the-art learning algorithms with PyTorch implementations",
+			explain: "SOTA algorithms are a core feature of LeRobot."
+		}
+	]}
+/>
+
+### 3. What is the main advantage of LeRobot's optimized inference stack?
+
+<Question
+	choices={[
+		{
+			text: "It makes training faster on GPUs.",
+			explain: "The inference stack is about deployment, not training speed."
+		},
+		{
+			text: "It reduces the memory requirements for storing datasets.",
+			explain: "Memory reduction is handled by the dataset format, not the inference stack."
+		},
+		{
+			text: "It decouples action planning from action execution for better real-time performance.",
+			explain: "This separation is crucial for real-time robot control where millisecond delays matter.",
+            correct: true
+		},
+        {
+			text: "It automatically generates training data from robot interactions.",
+			explain: "Data generation is not handled by the inference stack."
+		}
+	]}
+/>
+
+### 4. Which types of robotic platforms does LeRobot support?
+
+<Question
+	choices={[
+		{
+			text: "Only manipulation robots like robotic arms.",
+			explain: "LeRobot supports much more than just manipulation platforms."
+		},
+		{
+			text: "Manipulation, locomotion, and whole-body control platforms.",
+			explain: "LeRobot supports the full spectrum of robotic platforms, from simple arms to complex humanoids.",
+            correct: true
+		},
+		{
+			text: "Only robots that cost more than $10,000.",
+			explain: "LeRobot focuses on accessible, low-cost platforms to democratize robotics."
+		},
+        {
+			text: "Only robots manufactured by specific companies.",
+			explain: "LeRobot supports open-source and accessible robots from various sources."
+		}
+	]}
+/>
+
+### 5. What does "end-to-end integration with the robotics stack" mean in the context of LeRobot?
+
+<Question
+	choices={[
+		{
+			text: "It only handles high-level planning, not low-level control.",
+			explain: "End-to-end means it covers everything from low-level control to high-level algorithms."
+		},
+		{
+			text: "It covers everything from low-level hardware control to high-level learning algorithms.",
+			explain: "This comprehensive coverage eliminates the need to integrate multiple separate tools.",
+            correct: true
+		},
+		{
+			text: "It requires separate tools for data handling and model training.",
+			explain: "End-to-end integration means you don't need separate tools - everything is unified."
+		},
+        {
+			text: "It only works with specific operating systems.",
+			explain: "Platform integration refers to robotics components, not operating systems."
+		}
+	]}
+/>
+
+### 6. What is the primary purpose of the `delta_timestamps` parameter in LeRobotDataset?
 
 <Question
 	choices={[
@@ -212,7 +333,7 @@ Test your understanding of LeRobotDataset and robotics data handling:
 	]}
 />
 
-### 2. Which of the following best describes the three main components of LeRobotDataset?
+### 7. Which of the following best describes the three main components of LeRobotDataset?
 
 <Question
 	choices={[
@@ -236,7 +357,7 @@ Test your understanding of LeRobotDataset and robotics data handling:
 	]}
 />
 
-### 3. What happens when you use `StreamingLeRobotDataset` instead of `LeRobotDataset`?
+### 8. What happens when you use `StreamingLeRobotDataset` instead of `LeRobotDataset`?
 
 <Question
 	choices={[
@@ -260,7 +381,7 @@ Test your understanding of LeRobotDataset and robotics data handling:
 	]}
 />
 
-### 4. In the context of robot learning, what does "temporal windowing" refer to?
+### 9. In the context of robot learning, what does "temporal windowing" refer to?
 
 <Question
 	choices={[
@@ -284,7 +405,7 @@ Test your understanding of LeRobotDataset and robotics data handling:
 	]}
 />
 
-### 5. What is the main advantage of LeRobotDataset's approach to storing video data?
+### 10. What is the main advantage of LeRobotDataset's approach to storing video data?
 
 <Question
 	choices={[
@@ -308,7 +429,7 @@ Test your understanding of LeRobotDataset and robotics data handling:
 	]}
 />
 
-### 6. Which statement about LeRobotDataset's compatibility is correct?
+### 11. Which statement about LeRobotDataset's compatibility is correct?
 
 <Question
 	choices={[
@@ -332,13 +453,3 @@ Test your understanding of LeRobotDataset and robotics data handling:
 	]}
 />
 
-💡 **Key Takeaways:**
-- LeRobotDataset handles the complexity of multi-modal, temporal robotics data
-- `delta_timestamps` enables easy access to observation histories and action sequences
-- The format separates storage efficiency from user-friendly APIs
-- Streaming support makes large datasets accessible without massive storage requirements
-- Integration with PyTorch and Hugging Face ecosystems simplifies training workflows
-
----
-
-**Next:** Now that we understand modern robotics tools, let's explore why traditional approaches have limitations that motivate learning-based methods.
