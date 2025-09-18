@@ -1,145 +1,129 @@
-# Welcome to the 🤗 robotics-course
+# Welcome to the 🤗 Robotics Course
 
-<!-- TODO: update content -->
+![Robotics Course](https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png)
 
-![Fine-Tuning Course thumbnail](https://github.com/huggingface/smol-course/blob/main/banner.png?raw=true)
+This free course will take you on a journey, **from classical robotics to modern learning-based approaches**, in understanding, implementing, and applying machine learning techniques to real robotic systems.
 
-Welcome to the comprehensive (and smollest) course to **Fine-Tuning Language Models**!
-
-This free course will take you on a journey, **from beginner to expert**, in understanding, implementing, and optimizing fine-tuning techniques for large language models.
-
-This first unit will help you onboard:
-
-* Discover the **course's syllabus**.
-* **Get more information about the certification process and the schedule**.
-* Get to know the team behind the course.
-* Create your **account**.
-* **Sign-up to our Discord server**, and meet your classmates and us.
-
-Let's get started!
+This first unit will help you onboard. You’ll see the course syllabus and learning objectives, understand the structure and prerequisites, meet the team behind the course, learn about LeRobot and the surrounding Huggnig Face ecosystem, and explore the community resources that support your journey. 
 
 <Tip>
 
-This course is smol but fast! It's for software developers and engineers looking to fast track their LLM fine-tuning skills. If that's not you, check out the [LLM Course](https://huggingface.co/learn/llm-course/).
+This course bridges theory and practice in Robotics! It's designed for students interested in understanding how machine learning is transforming robotics. Whether you're new to robotics or looking to understand learning-based approaches, this course will guide you step by step.
+
+<!-- TODO: could mention pdf version here -->
 
 </Tip>
 
 ## What to expect from this course?
 
-In this course, you will:
+Across the course you will study classical robotics foundations and modern learning‑based approaches, learn to use LeRobot, work with real robotics datasets, and implement state‑of‑the‑art algorithms. The emphasis is on practical skills you can apply to real robotic systems.
 
-* 📖 Study instruction tuning, supervised fine-tuning, and preference alignment in theory and practice.
-* 🧑‍💻 Learn to use established fine-tuning frameworks and tools like TRL and Transformers.
-* 💾 Share your projects and explore fine-tuning applications created by the community.
-* 🏆 Participate in challenges where you will evaluate your fine-tuned models against other students.
-* 🎓 Earn a certificate of completion by completing assignments.
+At the end of this course, you'll understand:
 
-At the end of this course, you'll understand **how to fine-tune language models effectively and build specialized AI applications using the latest fine-tuning techniques**.
-
-Don't forget to [**sign up to the course!**](https://huggingface.co/smol-course)
-
-## What does the course look like?
-
-The course is composed of:
-
-* _Foundational Units_: where you learn fine-tuning **concepts in theory**.
-* _Hands-on_: where you'll learn **to use established fine-tuning frameworks** to adapt your models. These hands-on sections will have pre-configured environments.
-* _Use case assignments_: where you'll apply the concepts you've learned to solve a real-world problem that you'll choose.
-* _Collaborations_: We're collaborating with Hugging Face's partners to give you the latest fine-tuning implementations and tools.
- 
-This **course is a living project, evolving with your feedback and contributions!** Feel free to open issues and PRs in GitHub, and engage in discussions in our Discord server.
+- how robots learn from data
+- why learning-based approaches are transforming robotics
+- how to implement these techniques using modern tools like LeRobot
 
 ## What's the syllabus?
 
-Here is the **general syllabus for the course**. A more detailed list of topics will be released with each unit.
+Here is the general syllabus for the robotics course. Each unit builds on the previous ones to give you a comprehensive understanding of Robotics.
 
 | # | Topic | Description | Released |
 | - | ----- | ----------- | -------- |
-| 1 | Instruction Tuning | Supervised fine-tuning, chat templates, instruction following | ✅ |
-| 2 | Evaluation | Benchmarks and custom domain evaluation | September |
-| 3 | Preference Alignment | Aligning models to human preferences with algorithms like DPO. | October |
-| 4 | Reinforcement Learning | Optimizing models with based on reinforcement policies. | October |
-| 5 | Vision Language Models | Adapt and use multimodal models | November |
-| 6 | Synthetic Data | Generate synthetic datasets for custom domains | November |
-| 7 | Award Ceremony | Showcase projects and celebrate | December |
+| 0 | Course Introduction | Welcome, prerequisites, and course overview | ✅ |
+| 1 | Course Overview | Learning path and objectives | ✅ |
+| 2 | Introduction to Robotics | Why Robotics matters and LeRobot ecosystem | ✅ |
+| 3 | Classical Robotics | Traditional approaches and their limitations | ✅ |
+| 4 | Course Summary | Transition from classical to learning-based approaches | ✅ |
+| 5 | Reinforcement Learning | How robots learn through trial and error | Coming Soon |
+| 6 | Imitation Learning | Learning from demonstrations and behavioral cloning | Coming Soon |
+| 7 | Foundation Models | Large-scale models for general robotics | Coming Soon |
+
+<!-- TODO: update the syllabus with final changes -->
 
 ## What are the prerequisites?
 
-To be able to follow this course, you should have:
+You should be comfortable with basic Python (variables, functions, loops). Elementary linear algebra and calculus help but aren’t required. General familiarity with ML is a bonus—we explain concepts as they arise. Most importantly, bring curiosity about how machines learn to act in the physical world.
 
-* Basic understanding of AI and LLM concepts
-* Familiarity with Python programming and machine learning fundamentals
-* Experience with PyTorch or similar deep learning frameworks
-* Understanding of transformers architecture basics
-
-If you don't have any of these, don't worry. Check out the [LLM Course](https://huggingface.co/learn/llm-course/) to get started.
+If you don't have programming experience, don't worry! The course is designed to be accessible, and we provide explanations for technical concepts as they arise.
 
 <Tip>
 
-The above courses are not prerequisites in themselves, so if you understand the concepts of LLMs and transformers, you can start the course now!
+**New to robotics?** This course is designed to be beginner-friendly! We start from the basics and build up to advanced concepts. If you have basic programming knowledge and curiosity about how robots work, you're ready to start.
 
 </Tip>
 
 ## What tools do I need?
 
-You only need 2 things:
+You only need a few things to get started:
 
-* _A computer_ with an internet connection and preferably GPU access ([Hugging Face Pro](https://huggingface.co/pro) works great).
-* An _account_: to access the course resources and create projects. If you don't have an account yet, you can create one [here](https://huggingface.co/join) (it's free).
+* **A computer** with an internet connection (no special hardware required - you can start with simulated environments)
+* **Python environment** - We'll use Google Colab if you don't have local setup
+* **Optional: GPU access** - Helpful for training but not required for understanding concepts ([Hugging Face Pro](https://huggingface.co/pro) or Google Colab work great)
+* **Hugging Face account** - To access datasets and models. If you don't have one yet, you can create one [here](https://huggingface.co/join) (it's free)
 
-## The Certification Process
+## Learning and Assessment
 
-You can choose to follow this course _in audit mode_, or do the activities and _get one of the two certificates we'll issue_. If you audit the course, you can participate in all the challenges and do assignments if you want, and **you don't need to notify us**.
+This course is designed for **self-paced learning** with built-in assessments to help you track your progress.
 
-The certification process is **completely free**:
+**Course Features:**
+* **Interactive quizzes** at the end of each major unit to test your understanding
+* **Hands-on code examples** using LeRobot and real robotics datasets  
+* **Progressive difficulty** building from basic concepts to advanced techniques
+* **Real-world applications** connecting theory to practical robotics problems
 
-* _To get a certification for fundamentals_: you need to complete Unit 1 of the course. This is intended for students that want to understand instruction tuning basics without building advanced applications.
-* _To get a certificate of completion_: you need to complete all course units and submit a final project. This is intended for students that want to demonstrate mastery of fine-tuning techniques.
+**No formal certification required** - the goal is to gain practical knowledge and skills in Robotics that you can apply to your own projects and research.
 
 ## What is the recommended pace?
 
-Each chapter in this course is designed **to be completed in 1 week, with approximately 3-4 hours of work per week**.
+This course is designed to be **self-paced and flexible**. Each unit takes approximately **30-45 minutes** to complete, including reading, understanding concepts, and working through code examples.
 
-Since there's a deadline, we provide you a recommended pace:
-
-![Fine-Tuning Course thumbnail](https://github.com/huggingface/smol-course/blob/rerelease-chapter-1/schedule.png?raw=true)
+**Recommended approach:**
+* **Take your time** with each concept - Robotics builds on foundational understanding
+* **Try the code examples** - hands-on experience reinforces learning
+* **Take the quizzes** - they help identify areas that need more review
+* **Take breaks** between units to let concepts sink in
 
 ## How to get the most out of the course?
 
-To get the most out of the course, we have some advice:
+To get the most out of this robotics course, we recommend:
 
-1. [Join study groups in Discord](https://discord.gg/UrrTSsSyjb): Studying in groups is always easier. To do that, you need to join our discord server and verify your account.
-2. **Do the quizzes and assignments**: The best way to learn is through hands-on practice and self-assessment.
-3. **Define a schedule to stay in sync**: You can use our recommended pace schedule below or create yours.
-
-![Course advice](https://huggingface.co/datasets/mcp-course/images/resolve/main/unit0/3.png)
+1. **Engage with the community**: Join robotics discussions, explore LeRobot documentation, and connect with other learners interested in Robotics.
+2. **Practice with the code examples**: The best way to understand Robotics is through hands-on experience with real datasets and algorithms.
+3. **Take the quizzes seriously**: They're designed to reinforce key concepts and identify areas where you might need additional review.
+4. **Explore beyond the course**: Try LeRobot examples, experiment with different datasets, and see how the concepts apply to your own interests.
 
 ## Who are we
 
-About the authors:
+This course is based on the comprehensive Robotics Tutorial developed by the robotics team at Hugging Face and collaborators.
 
-### Ben Burtenshaw
+### Course Contributors
 
-Ben is a Machine Learning Engineer at Hugging Face who focuses on building LLM applications, with post training and agentic approaches. [Follow Ben on the Hub](https://huggingface.co/burtenshaw) to see his latest projects.
+The original tutorial was created by Francesco Capuano, Adil Zouitine, Pepijn Kooijmans, Thomas Wolf, Michel Aractingi, and the broader LeRobot team at Hugging Face, in collaboration with École Normale Supérieure Paris-Saclay.
 
 ## Acknowledgments
 
-We would like to extend our gratitude to the following individuals and partners for their invaluable contributions and support:
+We would like to extend our gratitude to the following projects and communities:
 
-- [Hugging Face Transformers](https://huggingface.co/docs/transformers)
-- [TRL (Transformer Reinforcement Learning)](https://huggingface.co/docs/trl)
-- [PEFT (Parameter-Efficient Fine-Tuning)](https://huggingface.co/docs/peft)
+- [LeRobot](https://github.com/huggingface/lerobot) - The open-source robotics library that powers this course
+- [Hugging Face Datasets](https://huggingface.co/docs/datasets) - For robotics data handling infrastructure  
+- [PyTorch](https://pytorch.org) - The deep learning framework used throughout
+- The broader **robotics research community** for creating and sharing the datasets and algorithms that make Robotics possible
 
 ## I found a bug, or I want to improve the course
 
 Contributions are **welcome** 🤗
 
-* If you _found a bug 🐛 in a notebook_, please [open an issue](https://github.com/huggingface/smol-course/issues/new) and **describe the problem**.
-* If you _want to improve the course_, you can [open a Pull Request](https://github.com/huggingface/smol-course/pulls).
-* If you _want to add a full section or a new unit_, the best is to [open an issue](https://github.com/huggingface/smol-course/issues/new) and **describe what content you want to add before starting to write it so that we can guide you**.
+* If you _found a bug or error_, please [open an issue](https://github.com/huggingface/lerobot/issues/new) and **describe the problem**.
+* If you _want to improve the course_, you can contribute to the robotics community through LeRobot development.
+* If you _want to add content or suggest improvements_, engage with the robotics community and share your ideas.
 
 ## I still have questions
 
-Please ask your question in our discord server #fine-tuning-course-questions.
+For questions about Robotics concepts, LeRobot usage, or course content:
 
-Now that you have all the information, let's get on board ⛵
+* Check the [LeRobot documentation](https://huggingface.co/docs/lerobot)
+* Explore the [LeRobot GitHub repository](https://github.com/huggingface/lerobot)
+* Engage with the robotics community on Hugging Face
+
+Now that you have all the information, let's start your Robotics journey! 🤖

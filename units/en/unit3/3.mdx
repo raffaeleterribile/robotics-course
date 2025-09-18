@@ -1,0 +1,101 @@
+# Understanding Robot Kinematics
+
+Let's explore how traditional robotics approaches robot control through a concrete example.
+
+## From Complex to Simple: The SO-100 Example
+
+<div style="text-align: center;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
+<p><em>The SO-100 arm simplified to a 2D planar manipulator by constraining some joints.</em></p>
+</div>
+
+The SO-100 is a 6-degree-of-freedom (6-DOF) robot arm. To understand the principles, let's simplify it to a **2-DOF planar manipulator** by constraining some joints.
+
+## The Simplified Robot
+
+Our simplified robot has:
+- **Two joints** with angles θ₁ and θ₂  
+- **Two links** of equal length *l*
+- **Configuration** q = [θ₁, θ₂] ∈ [-π, +π]²
+
+## Forward Kinematics: From Joints to Position
+
+**Question:** Given joint angles θ₁ and θ₂, where is the end-effector?
+
+**Answer:** We can calculate the end-effector position mathematically:
+
+$$p(q) = \begin{pmatrix} l \cos(\theta_1) + l \cos(\theta_1 + \theta_2) \\ l \sin(\theta_1) + l \sin(\theta_1 + \theta_2) \end{pmatrix}$$
+
+This is called **Forward Kinematics (FK)** - mapping from joint space to task space.
+
+<Tip>
+
+**Understanding the Math:** This equation comes from basic trigonometry! 
+- First link: endpoint at $(l \cos(\theta_1), l \sin(\theta_1))$
+- Second link: starts from first link's end, rotated by $\theta_1 + \theta_2$
+- Final position: sum of both link contributions
+
+**Why it matters:** FK is relatively easy - given joint angles, we can always compute where the robot's hand is. The hard part is the reverse...
+
+</Tip>
+
+## Inverse Kinematics: From Position to Joints
+
+**Question:** Given a desired end-effector position p*, what joint angles should we use?
+
+**Answer:** This is **Inverse Kinematics (IK)** - much harder to solve!
+
+We need to solve: $p(q) = p^*$
+
+In general, this becomes an optimization problem:
+$$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
+
+<Tip warning={true}>
+
+**Why IK is Hard:**
+- **Multiple solutions** - Same end position can be reached with different joint angles
+- **No solution** - Some positions are unreachable (outside workspace)
+- **Nonlinear equations** - Trigonometric functions make analytical solutions difficult
+- **Constraints** - Joint limits and obstacles further complicate the problem
+
+This is why robotics engineers spend so much time on IK algorithms!
+
+</Tip>
+
+## The Challenge of Constraints
+
+<div style="display: flex; justify-content: space-around; align-items: center;">
+<div style="text-align: center;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
+<p><em>Free to move</em></p>
+</div>
+<div style="text-align: center;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
+<p><em>Constrained by floor</em></p>
+</div>
+<div style="text-align: center;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
+<p><em>Multiple obstacles</em></p>
+</div>
+</div>
+
+Real robots face **constraints**:
+- **Physical limits** - Can't move through the floor
+- **Obstacles** - Must avoid collisions  
+- **Joint limits** - Finite range of motion
+
+These constraints make the feasible configuration space $\mathcal{Q}$ much more complex!
+
+## Key Insight
+
+Even for this **simple 2-DOF robot**, solving IK with constraints is non-trivial. Real robots have:
+- **6+ degrees of freedom**
+- **Complex geometries**  
+- **Dynamic environments**
+- **Uncertain models**
+
+Traditional approaches require **extensive mathematical modeling** and **expert knowledge** for each specific case.
+
+---
+
+**Next:** Let's see how differential kinematics tries to make this more tractable, and where it still struggles.

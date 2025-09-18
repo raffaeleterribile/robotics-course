@@ -2,48 +2,53 @@
 
 > *Know your enemy* [...] - Sun Tzu
 
-## Key Takeaway
+<Tip>
 
-Learning-based approaches to robotics are motivated by the need to:
-1. **Generalize across tasks and embodiments**
-2. **Reduce dependency on human expertise**
-3. **Leverage historical trends on the production of data**
+**Key Takeaway:** Learning-based approaches to robotics are motivated by fundamental needs that traditional dynamics-based techniques have historically overlooked. 
 
-All traditionally overlooked by dynamics-based techniques.
+Modern robotics requires methods that can generalize across different tasks and robot embodiments, allowing one approach to work effectively across many different problems rather than requiring custom solutions for each scenario. There's also a growing need to reduce dependency on human expertise, enabling systems to learn appropriate behaviors from data rather than requiring experts to hand-craft rules and models for every situation. Finally, the field needs approaches that can leverage the rapidly growing availability of robotics datasets, taking advantage of the collective knowledge captured in these large-scale data collections.
+
+</Tip>
 
 ## Explicit and Implicit Models
 
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-approaches.png" alt="Motion Generation Methods" style="width: 50%;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-approaches.png" alt="A diagram showing different approaches to robot motion generation, organized into two main categories: explicit dynamics-based methods on the left (including classical control, model predictive control, and trajectory optimization) and implicit learning-based methods on the right (including reinforcement learning, imitation learning, and neural networks). The diagram illustrates the spectrum from model-based to data-driven approaches in robotics." style="width: 50%;" />
 <p><em>Overview of methods to generate motion (clearly non-exhaustive). The different methods can be grouped based on whether they explicitly (dynamics-based) or implicitly (learning-based) model robot-environment interactions.</em></p>
 </div>
 
-Robotics is concerned with producing artificial motion in the physical world in useful, reliable and safe fashion. Thus, robotics is an inherently multi-disciplinary domain: producing autonomous motion in the physical world requires, to the very least, interfacing different software (motion planners) and hardware (motion executioners) components.
-
-Further, knowledge of mechanical, electrical, and software engineering, as well as rigid-body mechanics and control theory have therefore proven quintessential in robotics since the field first developed in the 1950s. More recently, Machine Learning (ML) has also proved effective in robotics, complementing these more traditional disciplines.
+Robotics is concerned with producing artificial motion in the physical world in useful, reliable and safe fashion. Thus, robotics is an inherently multi-disciplinary domain: producing autonomous motion in the physical world requires, to the very least, interfacing different software (motion planners) and hardware (motion executioners) components. Further, knowledge of mechanical, electrical, and software engineering, as well as rigid-body mechanics and control theory have therefore proven quintessential in robotics since the field first developed in the 1950s. More recently, Machine Learning (ML) has also proved effective in robotics, complementing these more traditional disciplines.
 
 As a direct consequence of its multi-disciplinary nature, robotics has developed as a rather wide array of methods, all concerned with the main purpose of **producing artificial motion in the physical world**.
 
-Methods to produce robotics motion range from traditional *explicit* models—**dynamics-based** methods, leveraging precise descriptions of the mechanics of robots' rigid bodies and their interactions with eventual obstacles in the environment—to *implicit* models—**learning-based** methods, treating artificial motion as a statistical pattern to learn given multiple sensorimotor readings.
+Methods to produce robotics motion range from traditional *explicit* models—**dynamics-based** methods, leveraging precise descriptions of the mechanics of robots' rigid bodies and their interactions with eventual obstacles in the environment—to *implicit* models—**learning-based** methods, treating artificial motion as a statistical pattern to learn given multiple sensorimotor readings. A variety of methods have been developed between these two extrema. Such examples aim at demonstrating the richness of approaches to robotics, and the figure above graphically illustrates some of the most relevant techniques. In this section, we wish to introduce the inherent benefits of **learning-based approaches to robotics**—the core focus on this tutorial.
+
+<Tip>
+
+**Explicit vs Implicit Models:**
+
+**Explicit (dynamics-based) approaches** rely on hand-crafted mathematical models of physics and require deep domain expertise to implement effectively. These methods work exceptionally well for well-understood, controlled scenarios where the physics can be precisely modeled. Classic examples include PID controllers and Model Predictive Control systems that have been the backbone of industrial robotics for decades.
+
+**Implicit (learning-based) approaches** take a fundamentally different strategy by learning patterns directly from data rather than requiring explicit mathematical models. These methods require less domain-specific engineering and can adapt to complex, uncertain environments that would be difficult to model analytically. Neural networks and reinforcement learning algorithms are prime examples of this approach.
+
+**Hybrid approaches** represent an exciting middle ground, combining the reliability of physics knowledge with the adaptability of learning systems. These methods use physics knowledge to guide and constrain the learning process, often achieving better performance than either approach alone.
+
+</Tip>
 
 ## Different Types of Motion
 
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-platforms.png" alt="Robotics Platforms" style="width: 70%;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="A collection of six different robotic platforms showing the diversity of robot designs: ViperX (a small desktop robotic arm), SO-100 (an open-source 3D-printable arm), Boston Dynamics' Spot (a four-legged walking robot), Open-Duck (a wheeled mobile robot), 1X's NEO (a humanoid robot), and Boston Dynamics' Atlas (an advanced bipedal humanoid robot). The image demonstrates how different robot designs are optimized for different types of motion and tasks." style="width: 70%;" />
 <p><em>Different kinds of motions are achieved with potentially very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas. This is an example list of robotic platforms and is (very) far from being exhaustive.</em></p>
 </div>
 
-In the vast majority of instances, robotics deals with producing motion via actuating joints connecting nearly entirely-rigid links. A key distinction between focus areas in robotics is based on whether the generated motion modifies:
+In the vast majority of instances, robotics deals with producing motion via actuating joints connecting nearly entirely-rigid links. A key distinction between focus areas in robotics is based on whether the generated motion modifies the absolute state of the environment through dexterous interactions, changes the relative state of the robot with respect to its environment through mobility, or combines both capabilities.
 
-1. **The absolute state of the environment** (via dexterity)
-2. **The relative state of the robot** with respect to its environment (exercising mobility skills)
-3. **A combination of the two**
+**Manipulation** involves generating motion to perform actions that induce desirable modifications in the environment. These effects are typically achieved *through* the robot - for example, a robotic arm grasping objects, assembling components, or using tools. The robot changes the world around it while remaining in a fixed location.
 
-Effects such as (1) are typically achieved *through* the robot, i.e. generating motion to perform an action inducing a desirable modification, effectively *manipulating* the environment (**manipulation**).
+**Locomotion** encompasses motions that result in changes to the robot's physical location within its environment. This general category includes both *wheeled locomotion* (like mobile bases and autonomous vehicles) and *legged locomotion* (like walking robots and quadrupeds), depending on the mechanism the robot uses to move through its environment.
 
-Motions like (2) may result in changes in the robot's physical location within its environment. Generally, modifications to a robot's location within its environment may be considered instances of the general **locomotion** problem, further specified as *wheeled* or *legged* locomotion based on whenever a robot makes use of wheels or leg(s) to move in the environment.
-
-Lastly, an increased level of dynamism in the robot-environment interactions can be obtained combining (1) and (2), thus designing systems capable to interact with *and* move within their environment. This category is problems is typically termed **mobile manipulation**, and is characterized by a typically much larger set of control variables compared to either locomotion or manipulation alone.
+**Mobile manipulation** represents a more complex category that combines both manipulation and locomotion capabilities. These systems can interact with *and* move within their environment, enabling much more dynamic and versatile robot-environment interactions. However, this versatility comes at the cost of significantly increased complexity, as mobile manipulation systems must coordinate a much larger set of control variables compared to either pure locomotion or manipulation systems.
 
 ## Example: Planar Manipulation
 
@@ -52,32 +57,32 @@ Robot manipulators typically consist of a series of links and joints, articulate
 Recently, the development of low-cost manipulators like the ALOHA, ALOHA-2 and SO-100/SO-101 platforms significantly lowered the barrier to entry to robotics, considering the increased accessibility of these robots compared to more traditional platforms like the Franka Emika Panda arm.
 
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-cost-accessibility.png" alt="Robot Cost Comparison" style="width: 40%;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-cost-accessibility.png" alt="Robot Cost Comparison" style="width: 40%;" />
 <p><em>Cheaper, more accessible robots are starting to rival traditional platforms like the Panda arm platforms in adoption in resource-constrained scenarios. The SO-100, in particular, has a cost in the 100s of Euros, and can be entirely 3D-printed in hours, while the industrially-manufactured Panda arm costs tens of thousands of Euros and is not openly available.</em></p>
 </div>
 
 ### Forward and Inverse Kinematics
 
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
-<p><em>The SO-100 arm is a 6-dof manipulator arm. Preventing some of its joints (shoulder pane, wrist flex and wrist roll) from actuating, it can be represented as a traditional 2-dof planar manipulator (the gripper joint in the end-effector is not considered towards the count of the degrees of freedom used to produce motion).</em></p>
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
+<p><em>The SO-100 arm is a 6‑DoF manipulator arm. Preventing some of its joints (shoulder pan, wrist flex and wrist roll) from actuating, it can be represented as a traditional 2‑DoF planar manipulator (the gripper joint in the end‑effector is not counted toward the degrees of freedom used to produce motion).</em></p>
 </div>
 
-Consider the (simple) case where a SO-100 is restrained from actuating (1) the shoulder pane and (2) the wrist flex and roll motors. This effectively reduces the degrees of freedom of the SO-100 from the original 5+1 (5 joints + 1 gripper) to 2+1 (shoulder lift, elbow flex + gripper).
+Consider the (simple) case where a SO‑100 is restrained from actuating (1) the shoulder pan and (2) the wrist flex and roll motors. This reduces the degrees of freedom of the SO‑100 from the original 5+1 (5 joints + 1 gripper) to 2+1 (shoulder lift, elbow flex + gripper).
 
 Let us make the simplifying assumption that actuators can produce rotations up to $2\pi$ radians. All these simplifying assumptions leave us with the planar manipulator where we can control the angles $\theta_1$ and $\theta_2$, jointly referred to as the robot's *configuration*, and indicated with $q = [\theta_1, \theta_2 ] \in [-\pi, +\pi]^2$.
 
 <div style="display: flex; justify-content: space-around; align-items: center;">
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
 <p><em>Free to move</em></p>
 </div>
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
 <p><em>Constrained by the surface</em></p>
 </div>
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
 <p><em>Constrained by surface and (fixed) obstacle</em></p>
 </div>
 </div>
@@ -107,7 +112,7 @@ This often admits the closed-form solution $\dot{q} = J(q)^+ \dot{p}^*$, where $
 ### Adding Feedback Loops
 
 <div style="text-align: right; width: 30%; float: right; margin-left: 20px;">
-<img src="../figures/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
 <p><em>Planar manipulator robot in the presence of a moving obstacle.</em></p>
 </div>
 
@@ -122,7 +127,7 @@ More advanced techniques for control consisting in feedback linearization, PID c
 Despite the last 60+ years of robotics research, autonomous robots are still largely incapable of performing tasks at human-level performance in the physical world generalizing across (1) robot embodiments (different manipulators, different locomotion platforms, etc.) and (2) tasks (tying shoe-laces, manipulating a diverse set of objects).
 
 <div style="text-align: center;">
-<img src="../figures/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
 <p><em>Dynamics-based approaches to robotics suffer from several limitations: (1) orchestrating multiple components poses integration challenges; (2) the need to develop custom processing pipelines for the sensing modalities and tasks considered hinders scalability; (3) simplified analytical models of physical phenomena limit real-world performance. Lastly, (4) dynamics-based methods overlook trends in the availability and growth of robotics data.</em></p>
 </div>
 

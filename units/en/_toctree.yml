@@ -5,18 +5,37 @@
   - local: unit0/2
     title: Robotics Hardware
 
-- title: "1. Robot Learning Tutorial"
+- title: "1. Course Introduction"
   sections:
   - local: unit1/1
     title: Abstract
+  - local: unit1/2
+    title: Course Overview and Learning Path
 
-- title: "2. Introduction"
+- title: "2. Introduction to Robot Learning"
   sections:
   - local: unit2/1
     title: Introduction to Robot Learning
+  - local: unit2/2
+    title: "LeRobot: An Open-Source Library"
+  - local: unit2/3
+    title: LeRobotDataset
+  - local: unit2/4
+    title: "Code Example: Batching a (Streaming) Dataset"
 
 - title: "3. Classical Robotics"
   sections:
   - local: unit3/1
-    title: Classical Robotics Foundations
+    title: Explicit and Implicit Models
+  - local: unit3/2
+    title: Different Types of Motion
+  - local: unit3/3
+    title: "Example: Planar Manipulation"
+  - local: unit3/4
+    title: Limitations of Dynamics-based Robotics
+
+- title: "4. Course Summary and Next Steps"
+  sections:
+  - local: unit4/1
+    title: From Classical to Learning-Based Robotics
 
