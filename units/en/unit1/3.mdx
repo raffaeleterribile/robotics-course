@@ -1,0 +1,50 @@
+# LeRobotDataset
+
+LeRobotDataset is a standardized dataset format designed to address the specific needs of robot learning research. It provides unified, convenient access to robotics data across modalities, including sensorimotor readings, multiple camera feeds, and teleoperation status. LeRobotDataset also stores general information about the data being collected, including textual task descriptions, the type of robot used, and measurement specifics such as frames per second for both image and robot state streams.
+
+<Tip>
+
+**Why a specialized format?** Traditional ML datasets (like ImageNet) are simple: one image, one label. Robotics data is much more complex:
+- **Multi-modal**: Images + sensor readings + actions, all synchronized
+- **Temporal**: Actions depend on observation history
+- **Episodic**: Data is organized in trajectories/episodes
+- **High-dimensional**: Multiple camera views, joint states, forces, etc.
+
+LeRobotDataset handles all this complexity seamlessly!
+
+</Tip>
+
+LeRobotDataset provides a unified interface for handling multi‑modal, time‑series data and integrates seamlessly with the PyTorch and Hugging Face ecosystems. It is extensible and customizable, and already supports openly available data across a variety of embodiments in LeRobot, ranging from manipulator platforms like the SO‑100 and ALOHA‑2 to humanoid arms and hands, simulation‑based datasets, and even autonomous driving. The format is built to be efficient for training and flexible enough to accommodate diverse data types, while promoting reproducibility and ease of use.
+
+## The Dataset Class Design
+
+A core design choice behind LeRobotDataset is separating the underlying data storage from the user-facing API. This allows for efficient storage while presenting the data in an intuitive, ready-to-use format.
+
+Datasets are always organized into three main components:
+
+- **Tabular Data**: Low-dimensional, high-frequency data such as joint states, and actions are stored in efficient memory-mapped files, and typically offloaded to the more mature `datasets` library by Hugging Face, providing fast with limited memory consumption.
+- **Visual Data**: To handle large volumes of camera data, frames are concatenated and encoded into MP4 files. Frames from the same episode are always grouped together into the same video, and multiple videos are grouped together by camera. To reduce stress on the file system, groups of videos for the same camera view are also broke into multiple sub-directories, after a given threshold number.
+- **Metadata**: A collection of JSON files which describes the dataset's structure in terms of its metadata, serving as the relational counterpart to both the tabular and visual dimensions of data. Metadata include the different feature schema, frame rates, normalization statistics, and episode boundaries.
+
+For scalability, and to support datasets with potentially millions of trajectories (resulting in hundreds of millions or billions of individual camera frames), we merge data from different episodes into the same high-level structure. Concretely, this means that any given tabular collection and video will not typically contain information about one episode only, but rather a concatenation of the information available in multiple episodes. This keeps the pressure on the file system limited, both locally and on remote storage providers like Hugging Face, though at the expense of leveraging more heavily relational-like, metadata parts of the dataset, which are used to reconstruct information such as at which position, in a given file, an episode starts or ends.
+
+An example structure for a given LeRobotDataset would appear as follows:
+
+- `meta/info.json`: This metadata is a central metadata file. It contains the complete dataset schema, defining all features (e.g., `observation.state`, `action`), their shapes, and data types. It also stores crucial information like the dataset's frames-per-second (`fps`), LeRobot's version at the time of capture, and the path templates used to locate data and video files.
+- `meta/stats.json`: This file stores aggregated statistics (mean, std, min, max) for each feature across the entire dataset, used for data normalization for most policy models and accessible externally via `dataset.meta.stats`.
+- `meta/tasks.jsonl`: This file contains the mapping from natural language task descriptions to integer task indices, which are useful for task-conditioned policy training.
+- `meta/episodes/*`: This directory contains metadata about each individual episode, such as its length, the corresponding task, and pointers to where its data is stored in the dataset's files. For scalability, this information is stored in files rather than a single large JSON file.
+- `data/*`: Contains the core frame-by-frame tabular data, using parquet files to allow for fast, memory-mapped access. To improve performance and handle large datasets, data from multiple episodes are concatenated into larger files. These files are organized into chunked subdirectories to keep the size of directories manageable. A single file typically contains data for more than one single episode.
+- `videos/*`: Contains the MP4 video files for all visual observation streams. Similar to the `data/` directory, the video footage from multiple episodes is concatenated into single MP4 files. This strategy significantly reduces the number of files in the dataset, which is more efficient for modern filesystems.
+
+<Tip>
+
+**Storage Efficiency:** By concatenating episodes into larger files, LeRobotDataset avoids the "small files problem" that can slow down filesystems. A dataset with 1M episodes might have only hundreds of actual files on disk!
+
+**Pro Tip:** The metadata files act like a database index, allowing fast access to specific episodes without loading entire video files.
+
+</Tip>
+
+---
+
+**Next:** Let's see LeRobotDataset in action with practical code examples.

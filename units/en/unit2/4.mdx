@@ -1,344 +1,284 @@
-# Code Example: Batching a (Streaming) Dataset
+# Control Systems and Their Limitations
 
-This section shows how to access datasets hosted on Hugging Face using the LeRobotDataset class. Any dataset on the Hub that follows the three pillars above (tabular, visual, relational metadata) can be accessed with a single instruction.
+## Differential Kinematics: A Smarter Approach
 
-Most reinforcement learning (RL) and behavioral cloning (BC) algorithms operate on stacks of observations and actions. For brevity, we refer to joint states and camera frames collectively as a single “frame.” For example, RL often uses a history of observations $o_{t-H_o:t}$ to mitigate partial observability, and BC typically regresses chunks of multiple actions ($a_{t:t+H_a}$) rather than single controls.
+Instead of solving for joint positions directly, we can work with **velocities**:
 
-To support these training patterns, LeRobotDataset provides native temporal windowing. You define the time offsets (before/after) around any frame using `delta_timestamps`. Unavailable frames are padded and a mask is returned to filter padded elements. This all happens inside LeRobotDataset and is transparent to higher‑level wrappers like `torch.utils.data.DataLoader`.
+### The Key Insight
+If we know the relationship between joint velocities and end-effector velocities, we can control motion more smoothly:
 
-<Tip>
+$$\dot{p} = J(q) \dot{q}$$
 
-**Temporal Windows Explained:** 
-- **Observation history**: `[-0.2, -0.1, 0.0]` gives you 200ms, 100ms, and current observations
-- **Action sequences**: `[0.0, 0.1, 0.2]` provides current and next 2 actions (100ms apart)
-- **Automatic padding**: Missing frames at episode boundaries are handled automatically
-- **Mask included**: Know which frames are real vs. padded for proper training
+Where $J(q)$ is the **Jacobian matrix** - the relationship between joint and task space velocities.
 
-This is crucial for robot learning where decisions depend on recent history!
+### Differential IK Solution
+Given a desired end-effector velocity $\dot{p}^*$, find joint velocities:
 
-</Tip>
+$$\dot{q} = J(q)^+ \dot{p}^*$$
 
-Conveniently, by using LeRobotDataset with a PyTorch `DataLoader` one can automatically collate the individual sample dictionaries from the dataset into a single dictionary of batched tensors for downstream training or inference. LeRobotDataset also natively supports streaming mode for datasets. Users can stream data of a large dataset hosted on the Hugging Face Hub, with a one-line change in their implementation. Streaming datasets supports high-performance batch processing (ca. 80-100 it/s, varying on connectivity) and high levels of frames randomization, key features for practical BC algorithms which otherwise may be slow or operating on highly non-i.i.d. data. This feature is designed to improve on accessibility so that large datasets can be processed by users without requiring large amounts of memory and storage.
+Where $J(q)^+$ is the **pseudo-inverse** of the Jacobian.
 
-Here are different ways to set up temporal windows depending on your use case:
+## Adding Feedback Control
 
-<hfoptions id="temporal-windows">
-<hfoption id="basic-bc">
+<div style="text-align: right; width: 30%; float: right; margin-left: 20px;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
+<p><em>Dealing with moving obstacles requires feedback control.</em></p>
+</div>
 
-**Basic Behavioral Cloning** (learn current action from current observation):
+Real environments are **dynamic and uncertain**. We need feedback to handle:
+- **Modeling errors** - Our equations aren't perfect
+- **Disturbances** - Unexpected forces or obstacles  
+- **Sensor noise** - Measurements have uncertainty
 
-```python
-# Simple: current observation → current action
-delta_timestamps = {
-    "observation.images.wrist_camera": [0.0],  # Just current frame
-    "action": [0.0]  # Just current action
-}
+### Feedback Control Solution
+Combine desired motion with error correction:
 
-dataset = LeRobotDataset(
-    "lerobot/svla_so101_pickplace", 
-    delta_timestamps=delta_timestamps
-)
+$$\dot{q} = J(q)^+ (\dot{p}^* + k_p \Delta p)$$
+
+Where $\Delta p = p^* - p(q)$ is the position error.
+
+## Why Classical Approaches Struggle
+
+<div style="text-align: center;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
+<p><em>Four key limitations of dynamics-based robotics approaches.</em></p>
+</div>
+
+### 1. 🔧 **Integration Challenges**
+Classical pipelines are built from **separate modules**:
+- Sensing → State Estimation → Planning → Control → Actuation
+
+**Problems:**
+- Errors compound through the pipeline
+- Brittle when any component fails
+- Hard to adapt to new tasks or robots
+
+### 2. 📈 **Limited Scalability**  
+Traditional methods struggle with:
+- **High-dimensional sensor data** (cameras, LIDAR)
+- **Multi-task scenarios** (each task needs custom planning)
+- **Multi-modal integration** (vision + touch + proprioception)
+
+### 3. 🧮 **Modeling Limitations**
+Real-world physics is complex:
+- **Contact dynamics** - Hard to model precisely
+- **Deformable objects** - Beyond rigid-body assumptions
+- **Friction and compliance** - Difficult to characterize
+
+### 4. 📊 **Ignoring Data Trends**
+Classical methods don't leverage:
+- **Growing robotics datasets** - Millions of demonstrations available
+- **Cross-robot learning** - Insights from other platforms
+- **Community knowledge** - Decentralized data collection
+
+## The Learning Alternative
+
+<hfoptions id="robotics-approaches">
+<hfoption id="classical">
+
+**Classical Robotics Approach:**
+
 ```
+Perception → State Estimation → Planning → Control → Actuation
+```
+
+**Challenges:**
+- Each module needs expert tuning
+- Errors compound through pipeline  
+- Hard to adapt to new tasks/robots
+- Requires precise world models
 
 </hfoption>
-<hfoption id="history-bc">
+<hfoption id="learning">
 
-**History-Based BC** (use observation history for better decisions):
+**Learning-Based Approach:**
 
-```python
-# Use observation history for context
-delta_timestamps = {
-    "observation.images.wrist_camera": [-0.2, -0.1, 0.0],  # 200ms history
-    "action": [0.0]  # Current action
-}
-
-dataset = LeRobotDataset(
-    "lerobot/svla_so101_pickplace",
-    delta_timestamps=delta_timestamps
-)
-
-sample = dataset[100]
-# Images shape: [3, C, H, W] - 3 historical frames
-# Action shape: [action_dim] - single current action
+```
+Raw Sensors → Neural Network → Actions
 ```
 
-</hfoption>
-<hfoption id="action-chunking">
-
-**Action Chunking** (predict action sequences for smoother control):
-
-```python
-# Predict multiple future actions at once
-delta_timestamps = {
-    "observation.images.wrist_camera": [-0.1, 0.0],  # Recent + current
-    "action": [0.0, 0.1, 0.2, 0.3]  # Current + 3 future actions
-}
-
-dataset = LeRobotDataset(
-    "lerobot/svla_so101_pickplace",
-    delta_timestamps=delta_timestamps
-)
-
-sample = dataset[100] 
-# Images shape: [2, C, H, W] - 2 observation frames
-# Action shape: [4, action_dim] - 4 action predictions
-```
-
-</hfoption>
-</hfoptions>
-
-### Streaming Large Datasets
-
-<Tip>
-
-**When to use streaming:**
-- **Dataset > available storage** - Stream datasets that don't fit on your disk
-- **Experimentation** - Quickly try different datasets without downloading
-- **Cloud training** - Reduce startup time by streaming from Hugging Face Hub
-- **Network available** - Requires stable internet connection during training
-
-**Performance:** Streaming achieves 80-100 it/s with good connectivity!
-
-</Tip>
-
-<hfoptions id="dataset-loading">
-<hfoption id="download">
-
-**Download Dataset** (faster training, requires storage):
-
-```python
-from lerobot.datasets.lerobot_dataset import LeRobotDataset
-
-# Downloads dataset to local cache
-dataset = LeRobotDataset("lerobot/svla_so101_pickplace")
-
-# Fastest access after download
-sample = dataset[100]
-```
-
-</hfoption>
-<hfoption id="streaming">
-
-**Stream Dataset** (no storage needed, requires internet):
-
-```python
-from lerobot.datasets.streaming_dataset import StreamingLeRobotDataset
-
-# Stream data without downloading
-streaming_dataset = StreamingLeRobotDataset(
-    "lerobot/svla_so101_pickplace",
-    delta_timestamps=delta_timestamps
-)
-
-# Works exactly like regular dataset
-sample = streaming_dataset[100]
-```
+**Benefits:**
+- ✅ **Learn from data** - Use demonstrations and experience
+- ✅ **End-to-end training** - Optimize the entire pipeline together  
+- ✅ **Generalize across tasks** - Share knowledge between different objectives
+- ✅ **Adapt to new robots** - Transfer insights across platforms
 
 </hfoption>
 </hfoptions>
 
-## Training Integration
+This is the promise of **robot learning**!
 
-### PyTorch DataLoader
+<Tip>
 
-```python
-import torch
-from torch.utils.data import DataLoader
+**The Best of Both Worlds:** Modern robot learning often combines classical insights with learning. For example:
+- Use physics knowledge to structure neural networks
+- Combine learning with safety constraints from control theory
+- Initialize learning with classical solutions
 
-# Create DataLoader for training
-dataloader = DataLoader(
-    dataset,
-    batch_size=16,
-    shuffle=True,
-    num_workers=4
-)
+Pure learning vs pure classical is a false dichotomy - hybrid approaches often work best!
 
-# Training loop
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+</Tip>
 
-for batch in dataloader:
-    # Move to device
-    observations = batch["observation.state"].to(device)
-    actions = batch["action"].to(device)
-    images = batch["observation.images.wrist_camera"].to(device)
-    
-    # Your model training here
-    # loss = model(observations, images, actions)
-    # loss.backward()
-    # optimizer.step()
-```
-
-## Why This Matters
-
-This simple API hides significant complexity:
-- ✅ **Multi-modal synchronization** - Images and sensors perfectly aligned
-- ✅ **Efficient storage** - Compressed videos, memory-mapped arrays
-- ✅ **Temporal handling** - Easy access to observation/action sequences  
-- ✅ **Scalability** - Same code works for small and massive datasets
-
-Compare this to traditional robotics data handling, which often requires:
-- Custom parsers for each data format
-- Manual synchronization across modalities
-- Complex buffering for temporal windows
-- Platform-specific loading code
-
-LeRobotDataset **standardizes and simplifies** all of this!
+---
 
 ## Section Quiz
 
-Test your understanding of LeRobotDataset and robotics data handling:
+Test your understanding of classical robotics and its limitations:
 
-### 1. What is the primary purpose of the `delta_timestamps` parameter in LeRobotDataset?
+### 1. What is the main difference between forward kinematics (FK) and inverse kinematics (IK)?
 
 <Question
 	choices={[
 		{
-			text: "It sets the frame rate for video recording.",
-			explain: "Frame rates are stored in metadata, not controlled by delta_timestamps."
+			text: "FK is faster to compute than IK.",
+			explain: "While FK is often faster, this isn't the fundamental difference between them."
 		},
 		{
-			text: "It defines temporal windows to access observation histories and action sequences.",
-			explain: "delta_timestamps allows you to specify which time offsets to include, enabling access to past observations and future actions.",
+			text: "FK maps from joint angles to end-effector position, while IK maps from desired position to required joint angles.",
+			explain: "This captures the essential difference: FK goes from configuration space to task space, IK goes the reverse direction.",
             correct: true
 		},
 		{
-			text: "It synchronizes data across different robots.",
-			explain: "Synchronization across robots is not handled by delta_timestamps."
+			text: "FK works with velocities while IK works with positions.",
+			explain: "Both FK and IK can work with positions - you're thinking of differential kinematics."
 		},
         {
-			text: "It compresses video data for storage efficiency.",
-			explain: "Video compression is handled separately in the dataset storage format."
+			text: "FK is used for planning while IK is used for control.",
+			explain: "Both FK and IK are used in various stages of robotics pipelines."
 		}
 	]}
 />
 
-### 2. Which of the following best describes the three main components of LeRobotDataset?
+### 2. Which of the following best describes differential inverse kinematics?
 
 <Question
 	choices={[
 		{
-			text: "Images, Actions, and Rewards",
-			explain: "While these are important data types, they don't describe the architectural components."
+			text: "It solves for joint positions using calculus-based optimization.",
+			explain: "Differential IK works with velocities, not positions directly."
 		},
 		{
-			text: "Tabular Data, Visual Data, and Metadata",
-			explain: "These are the three architectural pillars: efficient storage for sensor data, compressed videos, and JSON metadata files.",
+			text: "It uses the Jacobian matrix to relate joint velocities to end-effector velocities.",
+			explain: "This is the key insight: ṗ = J(q)q̇ allows us to work in velocity space where solutions are often simpler.",
             correct: true
 		},
 		{
-			text: "Training, Validation, and Test sets",
-			explain: "These are data splits, not the architectural components of the format."
+			text: "It eliminates the need for feedback control in robotics.",
+			explain: "Differential IK often still requires feedback control to handle errors and disturbances."
 		},
         {
-			text: "Simulation, Real Robot, and Hybrid data",
-			explain: "These describe data sources, not the storage architecture."
+			text: "It only works for robots with two degrees of freedom.",
+			explain: "Differential IK works for robots with any number of degrees of freedom."
 		}
 	]}
 />
 
-### 3. What happens when you use `StreamingLeRobotDataset` instead of `LeRobotDataset`?
+### 3. What are the four main limitations of dynamics-based robotics approaches discussed in this unit?
 
 <Question
 	choices={[
 		{
-			text: "The data is automatically augmented for better training.",
-			explain: "Streaming doesn't involve data augmentation - that's a separate preprocessing step."
+			text: "Cost, complexity, speed, and accuracy",
+			explain: "While these are challenges, they're not the four specific limitations discussed."
 		},
 		{
-			text: "The dataset is downloaded faster to your local machine.",
-			explain: "Streaming actually avoids downloading the dataset entirely."
-		},
-		{
-			text: "Data is streamed from the Hugging Face Hub without downloading, saving storage space.",
-			explain: "StreamingLeRobotDataset allows you to process large datasets without downloading them locally.",
+			text: "Integration challenges, limited scalability, modeling limitations, and overlooking data trends",
+			explain: "These are the four key limitations: pipeline brittleness, multi-modal scalability issues, imperfect world models, and inability to leverage large datasets.",
             correct: true
 		},
+		{
+			text: "Hardware, software, sensors, and actuators",
+			explain: "These are components of robotic systems, not limitations of classical approaches."
+		},
         {
-			text: "The dataset is automatically split into train/validation sets.",
-			explain: "Data splitting is independent of the streaming vs download choice."
+			text: "Planning, perception, control, and execution",
+			explain: "These are stages in robotics pipelines, not the limitations discussed."
 		}
 	]}
 />
 
-### 4. In the context of robot learning, what does "temporal windowing" refer to?
+### 4. Why is inverse kinematics generally more difficult to solve than forward kinematics?
 
 <Question
 	choices={[
 		{
-			text: "The time it takes to train a robot learning model.",
-			explain: "Training time is not what temporal windowing refers to."
+			text: "IK requires more computational power than FK.",
+			explain: "While IK can be computationally intensive, this isn't the fundamental reason for the difficulty."
 		},
 		{
-			text: "Accessing multiple time steps of observations and actions around a given frame.",
-			explain: "Temporal windowing allows algorithms to use observation history and action sequences, crucial for robot learning.",
+			text: "IK involves nonlinear equations, multiple solutions, and constraints that make analytical solutions difficult.",
+			explain: "The trigonometric functions create nonlinear systems, some positions may be unreachable, and multiple joint configurations can reach the same point.",
             correct: true
 		},
 		{
-			text: "The frequency at which robot sensors collect data.",
-			explain: "Sensor frequency is separate from temporal windowing in datasets."
+			text: "IK requires more sensors than FK.",
+			explain: "The number of sensors needed is not what makes IK more difficult."
 		},
         {
-			text: "The duration of each robot episode or trajectory.",
-			explain: "Episode duration is different from temporal windowing within episodes."
+			text: "IK only works for specific types of robots.",
+			explain: "IK is a general problem that applies to most robotic systems."
 		}
 	]}
 />
 
-### 5. What is the main advantage of LeRobotDataset's approach to storing video data?
+### 5. What is the primary advantage of learning-based approaches over classical robotics methods?
 
 <Question
 	choices={[
 		{
-			text: "Videos are stored in the highest possible quality.",
-			explain: "Quality isn't the main focus - efficiency and scalability are."
+			text: "They are always faster to execute than classical methods.",
+			explain: "Speed isn't necessarily the primary advantage - classical methods can be very fast."
 		},
 		{
-			text: "Each frame is stored as a separate file for easy access.",
-			explain: "This would actually be inefficient - LeRobotDataset does the opposite."
+			text: "They require less computational power.",
+			explain: "Learning-based methods often require significant computational resources, especially for training."
 		},
 		{
-			text: "Multiple episodes are concatenated into larger MP4 files to reduce file system stress.",
-			explain: "This approach dramatically reduces the number of files, making storage more efficient for large datasets.",
+			text: "They can generalize across tasks and embodiments while learning from data instead of requiring explicit modeling.",
+			explain: "This captures the key advantages: generalization capability and learning from data rather than hand-crafted models.",
             correct: true
 		},
         {
-			text: "Videos are automatically compressed using AI algorithms.",
-			explain: "Standard video compression is used, not AI-based compression."
+			text: "They eliminate the need for any mathematical knowledge.",
+			explain: "Learning-based approaches still benefit from mathematical understanding, especially for hybrid methods."
 		}
 	]}
 />
 
-### 6. Which statement about LeRobotDataset's compatibility is correct?
+### 6. In the planar manipulator example, what does the Jacobian matrix J(q) represent?
 
 <Question
 	choices={[
 		{
-			text: "It only works with specific robot brands like SO-100.",
-			explain: "LeRobotDataset is designed to work across many different robot platforms."
+			text: "The position of the end-effector as a function of joint angles.",
+			explain: "That would be the forward kinematics function p(q), not the Jacobian."
 		},
 		{
-			text: "It requires custom code for each new robot platform.",
-			explain: "The unified format reduces the need for custom code per platform."
-		},
-		{
-			text: "It integrates seamlessly with PyTorch DataLoader and Hugging Face ecosystems.",
-			explain: "This integration makes it easy to use robotics data with existing ML workflows.",
+			text: "The relationship between joint velocities and end-effector velocities.",
+			explain: "The Jacobian captures how changes in joint velocities translate to changes in end-effector velocities: ṗ = J(q)q̇.",
             correct: true
 		},
+		{
+			text: "The force applied by each joint actuator.",
+			explain: "Forces are not represented by the Jacobian in kinematic analysis."
+		},
         {
-			text: "It only supports simulation data, not real robot data.",
-			explain: "LeRobotDataset supports both simulation and real robot data."
+			text: "The constraints imposed by obstacles in the environment.",
+			explain: "Environmental constraints are handled separately from the Jacobian matrix."
 		}
 	]}
 />
 
 💡 **Key Takeaways:**
-- LeRobotDataset handles the complexity of multi-modal, temporal robotics data
-- `delta_timestamps` enables easy access to observation histories and action sequences
-- The format separates storage efficiency from user-friendly APIs
-- Streaming support makes large datasets accessible without massive storage requirements
-- Integration with PyTorch and Hugging Face ecosystems simplifies training workflows
+- Classical robotics relies on explicit mathematical models and expert knowledge
+- Forward kinematics is straightforward, but inverse kinematics can be very challenging
+- Differential kinematics works with velocities rather than positions for better control
+- Classical approaches struggle with integration, scalability, modeling accuracy, and data utilization
+- Learning-based methods offer solutions to these fundamental limitations
+- The future lies in hybrid approaches that combine classical insights with learning capabilities
 
 ---
 
-**Next:** Now that we understand modern robotics tools, let's explore why traditional approaches have limitations that motivate learning-based methods.
+**Summary:** Classical robotics requires extensive modeling and expertise for each specific scenario. Learning-based approaches offer a path to more general, adaptable, and scalable robot intelligence.
+
+**Next:** In the upcoming units, we'll explore how reinforcement learning and imitation learning provide practical alternatives to classical control methods.

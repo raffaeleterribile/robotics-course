@@ -1,72 +1,165 @@
-# Course Overview and Learning Path
+# LeRobot: An Open-Source Library
 
-Welcome to the Robot Learning Tutorial! This course will take you on a journey from classical robotics to modern learning-based approaches.
+<div style="text-align: center;">
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png" alt="LeRobot Library Overview" style="width: 100%;" />
+<p><em>LeRobot is the open-source library for end-to-end robotics developed by Hugging Face. The library is vertically integrated on the entire robotics stack, supporting low-level control of real-world robot devices, advanced data and inference optimizations, as well as SOTA robot learning methods with simple implementations in pure PyTorch.</em></p>
+</div>
+
+LeRobot is an open-source library designed to integrate end-to-end with the entire robotics stack. With a strong focus on accessible, real-world robots, LeRobot supports many openly available robotic platforms for manipulation, locomotion and even whole-body control. 
 
 <Tip>
 
-**New to robotics?** Don't worry! This tutorial is designed to be accessible to anyone with basic programming knowledge. We'll build up the concepts step by step, starting from the fundamentals.
+**Supported Robots:** LeRobot currently supports accessible platforms such as **SO-100/SO-101** (3D‑printable arms) and **ALOHA/ALOHA‑2** (bimanual manipulation). For the up‑to‑date list of supported platforms, see the [official documentation](https://huggingface.co/docs/lerobot).
 
 </Tip>
 
-## What You'll Learn
+LeRobot also implements a unified, low-level approach to reading/writing robot configurations to extend support for other robot platforms with relatively low effort. The library introduces LeRobotDataset, a native robotics dataset format currently being used by the community to efficiently record and share datasets.
 
-By the end of this course, you will have developed both theoretical understanding and practical skills in robot learning. 
-
-The **core concepts** section will guide you through the fundamental shift happening in robotics today. You'll understand why the field is evolving from classical, model-based approaches to data-driven learning methods, how machine learning is transforming robot control systems, and the crucial role that large-scale datasets play in enabling modern robotic capabilities.
-
-From a **practical perspective**, you'll gain hands-on experience with LeRobot, Hugging Face's comprehensive robotics library. You'll learn to work with complex robotics datasets, understand different learning paradigms such as reinforcement learning and behavioral cloning, and implement state-of-the-art robot learning algorithms using real code examples.
-
-The course also covers **real-world applications** that demonstrate the power of these techniques. You'll explore how robots can learn complex behaviors from human demonstrations, understand the principles behind building generalist robotic systems that work across different tasks and environments, and discover how foundation models are scaling robotics capabilities to unprecedented levels.
+LeRobot also supports many state-of-the-art (SOTA) algorithms in robot learning—mainly based on Reinforcement Learning (RL) and Behavioral Cloning (BC) techniques—with efficient implementations in PyTorch, and extended support to experimentation and experiments tracking. Lastly, LeRobot defines a custom, optimized inference stack for robotic policies decoupling action planning from action execution, proving effective in guaranteeing more adaptability at runtime.
 
 <Tip warning={true}>
 
-**Time Commitment:** Each unit takes approximately 30-45 minutes to complete. We recommend taking breaks between units to let the concepts sink in.
+**Performance Note:** LeRobot's optimized inference stack is crucial for real-time robot control, where delays of even milliseconds can affect performance. This separation of planning and execution is a key innovation.
 
 </Tip>
 
-## Learning Path
+## Tutorial Structure
 
-This tutorial follows a carefully structured progression designed to build your understanding systematically.
+This tutorial serves the double purpose of providing useful references for the Science behind—and practical use of—common robot learning techniques. To this aim, we strike to provide a rigorous yet concise overview of the core concepts behind the techniques presented, paired with practical examples of how to use such techniques concretely, with code examples in LeRobot, for researchers and practitioners interested in the field of robot learning.
 
-**Foundations (Units 2-3):** We begin by establishing why learning-based approaches are necessary in modern robotics. You'll first explore the motivation behind robot learning and get hands-on experience with LeRobot's tools and dataset format. Then we'll examine classical robotics approaches in detail, understanding their strengths and fundamental limitations that motivate the shift toward learning-based methods.
+Our goal with this tutorial is to provide an intuitive explanation of the reasons various disparate ideas from Machine Learning (ML) have converged and are powering the current evolution of Robotics, driving the unprecedented progress we see today. We complement our presentation of the most common and recent approaches in robot learning with practical code implementations using LeRobot, and start here by presenting the dataset format introduced with LeRobot.
 
-**Learning Paradigms (Units 4-5):** *Coming in future updates* - These units will explore the core learning approaches that power modern robotics. You'll dive into reinforcement learning, where robots learn through trial and error, and imitation learning, where robots learn by observing and copying expert demonstrations.
+## Section Quiz
 
-**Modern Approaches (Unit 6):** *Coming in future updates* - The final section will cover cutting-edge developments in robotics foundation models, showing how large-scale pre-training and multi-task learning are creating more general and capable robotic systems.
+Test your understanding of LeRobot and its role in robot learning:
 
-## Before We Begin
+### 1. What makes LeRobot different from traditional robotics libraries?
 
-<Tip>
+<Question
+	choices={[
+		{
+			text: "It only works with simulation environments.",
+			explain: "LeRobot actually focuses on real-world robots and supports many physical platforms."
+		},
+		{
+			text: "It provides end-to-end integration across the entire robotics stack with state-of-the-art learning algorithms.",
+			explain: "LeRobot's key innovation is combining hardware control, data handling, and learning algorithms in one unified library.",
+            correct: true
+		},
+		{
+			text: "It requires expensive industrial robots to function.",
+			explain: "LeRobot focuses on accessible, low-cost robots to democratize robotics."
+		},
+        {
+			text: "It only supports classical control methods.",
+			explain: "LeRobot specifically focuses on learning-based approaches, not classical control."
+		}
+	]}
+/>
 
-**Prerequisites:**
-- **Essential:** Basic Python programming (variables, functions, loops)
-- **Helpful:** Elementary linear algebra and calculus
-- **Bonus:** General machine learning concepts (not required - we'll explain as we go!)
+### 2. Which of the following is NOT a key component of LeRobot's approach?
 
-**Don't have a robot?** No problem! You can follow along with simulated environments and datasets. The concepts translate directly to real hardware when you're ready.
+<Question
+	choices={[
+		{
+			text: "Unified low-level robot configuration handling",
+			explain: "This is indeed a key component that enables cross-platform compatibility."
+		},
+		{
+			text: "Native robotics dataset format (LeRobotDataset)",
+			explain: "LeRobotDataset is a central innovation of the library."
+		},
+		{
+			text: "Requiring expert knowledge for each new robot platform",
+			explain: "This is actually what LeRobot aims to eliminate - it reduces the expertise barrier.",
+            correct: true
+		},
+        {
+			text: "State-of-the-art learning algorithms with PyTorch implementations",
+			explain: "SOTA algorithms are a core feature of LeRobot."
+		}
+	]}
+/>
 
-</Tip>
+### 3. What is the main advantage of LeRobot's optimized inference stack?
 
-## Getting Started with LeRobot
+<Question
+	choices={[
+		{
+			text: "It makes training faster on GPUs.",
+			explain: "The inference stack is about deployment, not training speed."
+		},
+		{
+			text: "It reduces the memory requirements for storing datasets.",
+			explain: "Memory reduction is handled by the dataset format, not the inference stack."
+		},
+		{
+			text: "It decouples action planning from action execution for better real-time performance.",
+			explain: "This separation is crucial for real-time robot control where millisecond delays matter.",
+            correct: true
+		},
+        {
+			text: "It automatically generates training data from robot interactions.",
+			explain: "Data generation is not handled by the inference stack."
+		}
+	]}
+/>
 
-Throughout this course, we'll use LeRobot, Hugging Face's comprehensive open-source robotics library that democratizes access to state-of-the-art robot learning techniques. LeRobot addresses one of the biggest barriers in robotics education and research: the complexity of working with real robotic systems and data.
+### 4. Which types of robotic platforms does LeRobot support?
 
-The library provides intuitive dataset handling that makes working with complex robotics data as straightforward as working with text or images in traditional machine learning. You'll have access to pre-trained models that serve as strong starting points for your own projects, allowing you to build upon proven algorithms rather than starting from scratch. LeRobot also supports deployment on real robotic hardware, bridging the gap between simulation and real-world applications. Perhaps most importantly, it connects you to a growing community of robot learning practitioners, from researchers at leading institutions to hobbyists building amazing projects at home.
+<Question
+	choices={[
+		{
+			text: "Only manipulation robots like robotic arms.",
+			explain: "LeRobot supports much more than just manipulation platforms."
+		},
+		{
+			text: "Manipulation, locomotion, and whole-body control platforms.",
+			explain: "LeRobot supports the full spectrum of robotic platforms, from simple arms to complex humanoids.",
+            correct: true
+		},
+		{
+			text: "Only robots that cost more than $10,000.",
+			explain: "LeRobot focuses on accessible, low-cost platforms to democratize robotics."
+		},
+        {
+			text: "Only robots manufactured by specific companies.",
+			explain: "LeRobot supports open-source and accessible robots from various sources."
+		}
+	]}
+/>
 
-<Tip>
+### 5. What does "end-to-end integration with the robotics stack" mean in the context of LeRobot?
 
-**Installation Preview:** We'll walk through installing LeRobot in Unit 2, but if you're eager to get started:
+<Question
+	choices={[
+		{
+			text: "It only handles high-level planning, not low-level control.",
+			explain: "End-to-end means it covers everything from low-level control to high-level algorithms."
+		},
+		{
+			text: "It covers everything from low-level hardware control to high-level learning algorithms.",
+			explain: "This comprehensive coverage eliminates the need to integrate multiple separate tools.",
+            correct: true
+		},
+		{
+			text: "It requires separate tools for data handling and model training.",
+			explain: "End-to-end integration means you don't need separate tools - everything is unified."
+		},
+        {
+			text: "It only works with specific operating systems.",
+			explain: "Platform integration refers to robotics components, not operating systems."
+		}
+	]}
+/>
 
-```bash
-pip install lerobot
-```
-
-Check out the [LeRobot GitHub repository](https://github.com/huggingface/lerobot) for more details!
-
-</Tip>
-
-Ready to start your robot learning journey? Let's begin with understanding why classical robotics approaches have limitations and how learning can help overcome them.
+💡 **Key Takeaways:**
+- LeRobot provides end-to-end integration across the entire robotics stack
+- The library democratizes access to state-of-the-art robot learning algorithms
+- LeRobot supports a wide range of accessible, real-world robotic platforms
+- The optimized inference stack enables real-time robot control
+- LeRobotDataset standardizes robotics data handling across the community
 
 ---
 
-**Next:** In Unit 2, we'll explore the fundamentals of robot learning and see how LeRobot makes complex concepts accessible.
+**Next:** Let's explore the LeRobotDataset format and see how it simplifies working with robotics data.
