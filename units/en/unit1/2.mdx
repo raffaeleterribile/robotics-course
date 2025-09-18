@@ -2,10 +2,12 @@
 
 <div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png" alt="LeRobot Library Overview" style="width: 100%;" />
-<p><em>LeRobot is the open-source library for end-to-end robotics developed by Hugging Face. The library is vertically integrated on the entire robotics stack, supporting low-level control of real-world robot devices, advanced data and inference optimizations, as well as SOTA robot learning methods with simple implementations in pure PyTorch.</em></p>
-</div>
 
-LeRobot is an open-source library designed to integrate end-to-end with the entire robotics stack. With a strong focus on accessible, real-world robots, LeRobot supports many openly available robotic platforms for manipulation, locomotion and even whole-body control. 
+Now that we've learnt some history, let's explore the main python library that we will be using throughout the course, LeRobot.
+
+*LeRobot is the open-source library for end-to-end robotics developed by Hugging Face. The library is vertically integrated on the entire robotics stack, supporting low-level control of real-world robot devices, advanced data and inference optimizations, as well as SOTA robot learning methods with simple implementations in pure PyTorch.*
+
+By vertically integrating, we mean that LeRobot provides a unified interface for handling multi-modal, time-series data, and it is designed to play nicely with the PyTorch and Hugging Face ecosystems. In short, LeRobot is intended to be used as a single library for all your robotics needs. Much like how `transformers` is used for all your ML needs.
 
 <Tip>
 
@@ -152,14 +154,3 @@ Test your understanding of LeRobot and its role in robot learning:
 		}
 	]}
 />
-
-💡 **Key Takeaways:**
-- LeRobot provides end-to-end integration across the entire robotics stack
-- The library democratizes access to state-of-the-art robot learning algorithms
-- LeRobot supports a wide range of accessible, real-world robotic platforms
-- The optimized inference stack enables real-time robot control
-- LeRobotDataset standardizes robotics data handling across the community
-
----
-
-**Next:** Let's explore the LeRobotDataset format and see how it simplifies working with robotics data.
