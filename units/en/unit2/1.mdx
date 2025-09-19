@@ -20,10 +20,9 @@ Modern robotics requires methods that can generalize across different tasks and 
 
 We begin with the high-level picture: how do different approaches generate motion?
 
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-approaches.png" alt="A diagram showing different approaches to robot motion generation, organized into two main categories: explicit dynamics-based methods on the left (including classical control, model predictive control, and trajectory optimization) and implicit learning-based methods on the right (including reinforcement learning, imitation learning, and neural networks). The diagram illustrates the spectrum from model-based to data-driven approaches in robotics." style="width: 50%;" />
-<p><em>Overview of methods to generate motion (clearly non-exhaustive). The different methods can be grouped based on whether they explicitly (dynamics-based) or implicitly (learning-based) model robot-environment interactions.</em></p>
-</div>
+
+Overview of methods to generate motion (clearly non-exhaustive). The different methods can be grouped based on whether they explicitly (dynamics-based) or implicitly (learning-based) model robot-environment interactions.
 
 Robotics is concerned with producing artificial motion in the physical world in useful, reliable and safe fashion.
 
@@ -57,10 +56,9 @@ In this section, our goal is to introduce where classical methods excel, where t
 
 Now that we have the big picture, we can situate the problem: what kinds of motion do robots typically perform?
 
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="A collection of six different robotic platforms showing the diversity of robot designs: ViperX (a small desktop robotic arm), SO-100 (an open-source 3D-printable arm), Boston Dynamics' Spot (a four-legged walking robot), Open-Duck (a wheeled mobile robot), 1X's NEO (a humanoid robot), and Boston Dynamics' Atlas (an advanced bipedal humanoid robot). The image demonstrates how different robot designs are optimized for different types of motion and tasks." style="width: 70%;" />
-<p><em>Different kinds of motions are achieved with potentially very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas. This is an example list of robotic platforms and is (very) far from being exhaustive.</em></p>
-</div>
+
+Different kinds of motions are achieved with potentially very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas. This is an example list of robotic platforms and is (very) far from being exhaustive.
 
 At a high level, most systems you’ll encounter fall into three categories. Knowing which bucket you’re in helps you choose models, datasets, and controllers appropriately.
 
@@ -90,17 +88,17 @@ Robot manipulators typically consist of a series of links and joints, articulate
 
 Recently, the development of low-cost manipulators like the ALOHA, ALOHA-2 and SO-100/SO-101 platforms significantly lowered the barrier to entry to robotics, considering the increased accessibility of these robots compared to more traditional platforms like the Franka Emika Panda arm.
 
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-cost-accessibility.png" alt="Robot Cost Comparison" style="width: 40%;" />
-<p><em>Cheaper, more accessible robots are starting to rival traditional platforms like the Panda arm platforms in adoption in resource-constrained scenarios. The SO-100, in particular, has a cost in the 100s of Euros, and can be entirely 3D-printed in hours, while the industrially-manufactured Panda arm costs tens of thousands of Euros and is not openly available.</em></p>
-</div>
+
+Cheaper, more accessible robots are starting to rival traditional platforms like the Panda arm platforms in adoption in resource-constrained scenarios. The SO-100, in particular, has a cost in the 100s of Euros, and can be entirely 3D-printed in hours, while the industrially-manufactured Panda arm costs tens of thousands of Euros and is not openly available.</em></p>
+
 
 ### Forward and Inverse Kinematics
 
-<div style="text-align: center;">
+
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
-<p><em>The SO-100 arm is a 6‑DoF manipulator arm. Preventing some of its joints (shoulder pan, wrist flex and wrist roll) from actuating, it can be represented as a traditional 2‑DoF planar manipulator (the gripper joint in the end‑effector is not counted toward the degrees of freedom used to produce motion).</em></p>
-</div>
+
+The SO-100 arm is a 6‑DoF manipulator arm. Preventing some of its joints (shoulder pan, wrist flex and wrist roll) from actuating, it can be represented as a traditional 2‑DoF planar manipulator (the gripper joint in the end‑effector is not counted toward the degrees of freedom used to produce motion).
 
 Consider the (simple) case where a SO‑100 is restrained from actuating (1) the shoulder pan and (2) the wrist flex and roll motors. This reduces the degrees of freedom of the SO‑100 from the original 5+1 (5 joints + 1 gripper) to 2+1 (shoulder lift, elbow flex + gripper).
 
