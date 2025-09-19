@@ -56,7 +56,34 @@ Through this foundational section of the course, you've developed both technical
 
 </Tip>
 
-## Final Course Quiz
+
+💡 **Course Summary:**
+- Robot learning represents a paradigm shift from model-based to data-driven approaches
+- LeRobot democratizes access to state-of-the-art robot learning techniques
+- Classical robotics provides important foundations but has fundamental scalability limitations
+- Learning-based methods can generalize across tasks, robots, and environments
+- The future lies in combining classical insights with learning capabilities
+- Large-scale datasets and foundation models are transforming what's possible in robotics
+
+## Community and Resources
+
+As you continue your robot learning journey:
+
+📚 **Keep Learning:**
+- Explore LeRobot documentation: [huggingface.co/docs/lerobot](https://huggingface.co/docs/lerobot)
+- Try LeRobot examples: [github.com/huggingface/lerobot](https://github.com/huggingface/lerobot)
+- Join the community discussions
+
+🤝 **Get Involved:**
+- Contribute datasets to the community
+- Share your robot learning experiments
+- Help improve LeRobot tools and documentation
+
+---
+
+**Congratulations on completing the foundational units!** You're now ready to dive into the exciting world of learning-based robotics algorithms.
+
+## Final Chapter Quiz
 
 Test your comprehensive understanding of the foundational concepts in robot learning:
 
@@ -252,28 +279,146 @@ Test your comprehensive understanding of the foundational concepts in robot lear
 	]}
 />
 
-💡 **Course Summary:**
-- Robot learning represents a paradigm shift from model-based to data-driven approaches
-- LeRobot democratizes access to state-of-the-art robot learning techniques
-- Classical robotics provides important foundations but has fundamental scalability limitations
-- Learning-based methods can generalize across tasks, robots, and environments
-- The future lies in combining classical insights with learning capabilities
-- Large-scale datasets and foundation models are transforming what's possible in robotics
+### 9. What is the main difference between forward kinematics (FK) and inverse kinematics (IK)?
 
-## Community and Resources
+<Question
+	choices={[
+		{
+			text: "FK is faster to compute than IK.",
+			explain: "While FK is often faster, this isn't the fundamental difference between them."
+		},
+		{
+			text: "FK maps from joint angles to end-effector position, while IK maps from desired position to required joint angles.",
+			explain: "This captures the essential difference: FK goes from configuration space to task space, IK goes the reverse direction.",
+            correct: true
+		},
+		{
+			text: "FK works with velocities while IK works with positions.",
+			explain: "Both FK and IK can work with positions - you're thinking of differential kinematics."
+		},
+        {
+			text: "FK is used for planning while IK is used for control.",
+			explain: "Both FK and IK are used in various stages of robotics pipelines."
+		}
+	]}
+/>
 
-As you continue your robot learning journey:
+### 10. Which of the following best describes differential inverse kinematics?
 
-📚 **Keep Learning:**
-- Explore LeRobot documentation: [huggingface.co/docs/lerobot](https://huggingface.co/docs/lerobot)
-- Try LeRobot examples: [github.com/huggingface/lerobot](https://github.com/huggingface/lerobot)
-- Join the community discussions
+<Question
+	choices={[
+		{
+			text: "It solves for joint positions using calculus-based optimization.",
+			explain: "Differential IK works with velocities, not positions directly."
+		},
+		{
+			text: "It uses the Jacobian matrix to relate joint velocities to end-effector velocities.",
+			explain: "This is the key insight: ṗ = J(q)q̇ allows us to work in velocity space where solutions are often simpler.",
+            correct: true
+		},
+		{
+			text: "It eliminates the need for feedback control in robotics.",
+			explain: "Differential IK often still requires feedback control to handle errors and disturbances."
+		},
+        {
+			text: "It only works for robots with two degrees of freedom.",
+			explain: "Differential IK works for robots with any number of degrees of freedom."
+		}
+	]}
+/>
 
-🤝 **Get Involved:**
-- Contribute datasets to the community
-- Share your robot learning experiments
-- Help improve LeRobot tools and documentation
+### 11. What are the four main limitations of dynamics-based robotics approaches discussed in this unit?
 
----
+<Question
+	choices={[
+		{
+			text: "Cost, complexity, speed, and accuracy",
+			explain: "While these are challenges, they're not the four specific limitations discussed."
+		},
+		{
+			text: "Integration challenges, limited scalability, modeling limitations, and overlooking data trends",
+			explain: "These are the four key limitations: pipeline brittleness, multi-modal scalability issues, imperfect world models, and inability to leverage large datasets.",
+            correct: true
+		},
+		{
+			text: "Hardware, software, sensors, and actuators",
+			explain: "These are components of robotic systems, not limitations of classical approaches."
+		},
+        {
+			text: "Planning, perception, control, and execution",
+			explain: "These are stages in robotics pipelines, not the limitations discussed."
+		}
+	]}
+/>
 
-**Congratulations on completing the foundational units!** You're now ready to dive into the exciting world of learning-based robotics algorithms.
+### 12. Why is inverse kinematics generally more difficult to solve than forward kinematics?
+
+<Question
+	choices={[
+		{
+			text: "IK requires more computational power than FK.",
+			explain: "While IK can be computationally intensive, this isn't the fundamental reason for the difficulty."
+		},
+		{
+			text: "IK involves nonlinear equations, multiple solutions, and constraints that make analytical solutions difficult.",
+			explain: "The trigonometric functions create nonlinear systems, some positions may be unreachable, and multiple joint configurations can reach the same point.",
+            correct: true
+		},
+		{
+			text: "IK requires more sensors than FK.",
+			explain: "The number of sensors needed is not what makes IK more difficult."
+		},
+        {
+			text: "IK only works for specific types of robots.",
+			explain: "IK is a general problem that applies to most robotic systems."
+		}
+	]}
+/>
+
+### 13. What is the primary advantage of learning-based approaches over classical robotics methods?
+
+<Question
+	choices={[
+		{
+			text: "They are always faster to execute than classical methods.",
+			explain: "Speed isn't necessarily the primary advantage - classical methods can be very fast."
+		},
+		{
+			text: "They require less computational power.",
+			explain: "Learning-based methods often require significant computational resources, especially for training."
+		},
+		{
+			text: "They can generalize across tasks and embodiments while learning from data instead of requiring explicit modeling.",
+			explain: "This captures the key advantages: generalization capability and learning from data rather than hand-crafted models.",
+            correct: true
+		},
+        {
+			text: "They eliminate the need for any mathematical knowledge.",
+			explain: "Learning-based approaches still benefit from mathematical understanding, especially for hybrid methods."
+		}
+	]}
+/>
+
+### 14. In the planar manipulator example, what does the Jacobian matrix J(q) represent?
+
+<Question
+	choices={[
+		{
+			text: "The position of the end-effector as a function of joint angles.",
+			explain: "That would be the forward kinematics function p(q), not the Jacobian."
+		},
+		{
+			text: "The relationship between joint velocities and end-effector velocities.",
+			explain: "The Jacobian captures how changes in joint velocities translate to changes in end-effector velocities: ṗ = J(q)q̇.",
+            correct: true
+		},
+		{
+			text: "The force applied by each joint actuator.",
+			explain: "Forces are not represented by the Jacobian in kinematic analysis."
+		},
+        {
+			text: "The constraints imposed by obstacles in the environment.",
+			explain: "Environmental constraints are handled separately from the Jacobian matrix."
+		}
+	]}
+/>
