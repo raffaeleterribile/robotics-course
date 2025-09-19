@@ -62,6 +62,8 @@ Now that we have the big picture, we can situate the problem: what kinds of moti
 <p><em>Different kinds of motions are achieved with potentially very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas. This is an example list of robotic platforms and is (very) far from being exhaustive.</em></p>
 </div>
 
+At a high level, most systems you’ll encounter fall into three categories. Knowing which bucket you’re in helps you choose models, datasets, and controllers appropriately.
+
 In the vast majority of instances, robotics deals with producing motion via actuating joints connecting nearly entirely-rigid links. A key distinction between focus areas in robotics is based on whether the generated motion modifies the absolute state of the environment through dexterous interactions, changes the relative state of the robot with respect to its environment through mobility, or combines both capabilities.
 
 **Manipulation** involves generating motion to perform actions that induce desirable modifications in the environment. These effects are typically achieved *through* the robot - for example, a robotic arm grasping objects, assembling components, or using tools. The robot changes the world around it while remaining in a fixed location.
@@ -70,7 +72,15 @@ In the vast majority of instances, robotics deals with producing motion via actu
 
 **Mobile manipulation** represents a more complex category that combines both manipulation and locomotion capabilities. These systems can interact with *and* move within their environment, enabling much more dynamic and versatile robot-environment interactions. However, this versatility comes at the cost of significantly increased complexity, as mobile manipulation systems must coordinate a much larger set of control variables compared to either pure locomotion or manipulation systems.
 
-<!-- TODO: Diagram: three boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 concrete examples each. -->
+<!-- TODO: Diagram: three boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 concrete examples each; arrows showing shared sensing (vision/touch) but different action spaces. -->
+
+<Tip>
+
+Quick classifier: ask “what changes?” If mainly the world changes (object pose/state), you’re in manipulation. If mainly the robot pose changes, you’re in locomotion. If both change meaningfully within the task, you’re in mobile manipulation. This simple test helps when designing observations, actions, and evaluation.
+
+</Tip>
+
+We’ll reuse this taxonomy when discussing datasets (what sensors you need) and policies (what action spaces you predict) in the next sections.
 
 ## Example: Planar Manipulation
 
