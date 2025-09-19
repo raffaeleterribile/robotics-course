@@ -2,9 +2,15 @@
 
 > *Know your enemy* [...] - Sun Tzu
 
+In this section, we build a foundation on classical robotics which later you’ll use to understand why learning-based methods are so powerful. 
+
+We start with how motion is generated, then look at common robot types of motion, and finally work through a concrete kinematics example before discussing limitations.
+
 <Tip>
 
-**Key Takeaway:** Learning-based approaches to robotics are motivated by fundamental needs that traditional dynamics-based techniques have historically overlooked. 
+## Key Takeaway 
+
+Learning-based approaches to robotics are motivated by fundamental needs that traditional dynamics-based techniques have historically overlooked. 
 
 Modern robotics requires methods that can generalize across different tasks and robot embodiments, allowing one approach to work effectively across many different problems rather than requiring custom solutions for each scenario. There's also a growing need to reduce dependency on human expertise, enabling systems to learn appropriate behaviors from data rather than requiring experts to hand-craft rules and models for every situation. Finally, the field needs approaches that can leverage the rapidly growing availability of robotics datasets, taking advantage of the collective knowledge captured in these large-scale data collections.
 
@@ -12,16 +18,28 @@ Modern robotics requires methods that can generalize across different tasks and 
 
 ## Explicit and Implicit Models
 
+We begin with the high-level picture: how do different approaches generate motion?
+
 <div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-approaches.png" alt="A diagram showing different approaches to robot motion generation, organized into two main categories: explicit dynamics-based methods on the left (including classical control, model predictive control, and trajectory optimization) and implicit learning-based methods on the right (including reinforcement learning, imitation learning, and neural networks). The diagram illustrates the spectrum from model-based to data-driven approaches in robotics." style="width: 50%;" />
 <p><em>Overview of methods to generate motion (clearly non-exhaustive). The different methods can be grouped based on whether they explicitly (dynamics-based) or implicitly (learning-based) model robot-environment interactions.</em></p>
 </div>
 
-Robotics is concerned with producing artificial motion in the physical world in useful, reliable and safe fashion. Thus, robotics is an inherently multi-disciplinary domain: producing autonomous motion in the physical world requires, to the very least, interfacing different software (motion planners) and hardware (motion executioners) components. Further, knowledge of mechanical, electrical, and software engineering, as well as rigid-body mechanics and control theory have therefore proven quintessential in robotics since the field first developed in the 1950s. More recently, Machine Learning (ML) has also proved effective in robotics, complementing these more traditional disciplines.
+Robotics is concerned with producing artificial motion in the physical world in useful, reliable and safe fashion.
 
-As a direct consequence of its multi-disciplinary nature, robotics has developed as a rather wide array of methods, all concerned with the main purpose of **producing artificial motion in the physical world**.
+Thus, robotics is an inherently multi‑disciplinary domain: producing autonomous motion in the physical world requires, at the very least, interfacing different software (motion planners) and hardware (motion executioners) components.
 
-Methods to produce robotics motion range from traditional *explicit* models—**dynamics-based** methods, leveraging precise descriptions of the mechanics of robots' rigid bodies and their interactions with eventual obstacles in the environment—to *implicit* models—**learning-based** methods, treating artificial motion as a statistical pattern to learn given multiple sensorimotor readings. A variety of methods have been developed between these two extrema. Such examples aim at demonstrating the richness of approaches to robotics, and the figure above graphically illustrates some of the most relevant techniques. In this section, we wish to introduce the inherent benefits of **learning-based approaches to robotics**—the core focus on this tutorial.
+Further, knowledge of mechanical, electrical, and software engineering, as well as rigid‑body mechanics and control theory have proven quintessential in robotics since the field first developed in the 1950s. More recently, Machine Learning (ML) has also proved effective in robotics, complementing these more traditional disciplines.
+
+As a direct consequence of its multi‑disciplinary nature, robotics has developed as a wide array of methods, all concerned with the main purpose of **producing artificial motion in the physical world**.
+
+Methods to produce robotics motion range from traditional *explicit* models—**dynamics‑based** methods, leveraging precise descriptions of the mechanics of robots' rigid bodies and their interactions with eventual obstacles in the environment—to *implicit* models—**learning‑based** methods, treating artificial motion as a statistical pattern to learn given multiple sensorimotor readings.
+
+A variety of methods have been developed between these two extrema. The figure above illustrates some of the most relevant techniques.
+
+<!-- TODO: Small comparison table: Explicit vs Implicit vs Hybrid (inputs, knowledge, pros/cons). -->
+
+In this section, our goal is to introduce where classical methods excel, where they struggle, and why **learning‑based approaches** are helpful.
 
 <Tip>
 
@@ -37,6 +55,8 @@ Methods to produce robotics motion range from traditional *explicit* models—**
 
 ## Different Types of Motion
 
+Now that we have the big picture, we can situate the problem: what kinds of motion do robots typically perform?
+
 <div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="A collection of six different robotic platforms showing the diversity of robot designs: ViperX (a small desktop robotic arm), SO-100 (an open-source 3D-printable arm), Boston Dynamics' Spot (a four-legged walking robot), Open-Duck (a wheeled mobile robot), 1X's NEO (a humanoid robot), and Boston Dynamics' Atlas (an advanced bipedal humanoid robot). The image demonstrates how different robot designs are optimized for different types of motion and tasks." style="width: 70%;" />
 <p><em>Different kinds of motions are achieved with potentially very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas. This is an example list of robotic platforms and is (very) far from being exhaustive.</em></p>
@@ -50,7 +70,11 @@ In the vast majority of instances, robotics deals with producing motion via actu
 
 **Mobile manipulation** represents a more complex category that combines both manipulation and locomotion capabilities. These systems can interact with *and* move within their environment, enabling much more dynamic and versatile robot-environment interactions. However, this versatility comes at the cost of significantly increased complexity, as mobile manipulation systems must coordinate a much larger set of control variables compared to either pure locomotion or manipulation systems.
 
+<!-- TODO: Diagram: three boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 concrete examples each. -->
+
 ## Example: Planar Manipulation
+
+Let’s ground the ideas with a concrete, minimal example you can reason about step by step.
 
 Robot manipulators typically consist of a series of links and joints, articulated in a chain finally connected to an *end-effector*. Actuated joints are considered responsible for generating motion of the links, while the end effector is instead used to perform specific actions at the target location (e.g., grasping/releasing objects via closing/opening a gripper end-effector, using a specialized tool like a screwdriver, etc.).
 
@@ -99,7 +123,15 @@ $$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
 
 Exact analytical solutions to IK are even less appealing when one considers the presence of obstacles in the robot's workspace, resulting in constraints on the possible values of $q$.
 
+<Tip>
+
+If the algebra feels dense, focus on the mapping: FK answers “where is the hand given the joints?”, IK asks “what joints reach that hand position?”. The rest of the unit shows why the IK direction becomes hard in realistic settings.
+
+</Tip>
+
 ### Differential Inverse Kinematics
+
+When IK is hard to solve directly, we can often make progress by working with small motions (velocities) instead of absolute positions.
 
 Let $J(q)$ denote the Jacobian matrix of (partial) derivatives of the FK-function. Then, one can apply the chain rule to any $p(q)$, deriving $\dot{p} = J(q) \dot{q}$, and thus finally relating variations in the robot configurations to variations in pose.
 
@@ -108,6 +140,8 @@ Given a desired end-effector trajectory, differential IK finds $\dot{q}(t)$ solv
 $$\dot{q}(t) = \arg\min_\nu \|J(q(t)) \nu - \dot{p}^*(t)\|_2^2$$
 
 This often admits the closed-form solution $\dot{q} = J(q)^+ \dot{p}^*$, where $J^+(q)$ denotes the Moore-Penrose pseudo-inverse of $J(q)$.
+
+<!-- TODO: Micro-diagram: arrows from q -> J(q) -> p with small velocity vectors. -->
 
 ### Adding Feedback Loops
 
@@ -122,7 +156,11 @@ To mitigate the effect of modeling errors, sensing noise and other disturbances,
 
 More advanced techniques for control consisting in feedback linearization, PID control, Linear Quadratic Regulator (LQR) or Model-Predictive Control (MPC) can be employed to stabilize tracking and reject moderate perturbations.
 
+<!-- TODO: Block diagram: desired trajectory → controller → robot → sensors → error → controller. -->
+
 ## Limitations of Dynamics-based Robotics
+
+This brings us to the “so what?”: where do these classical tools struggle in practice, and why does that motivate learning?
 
 Despite the last 60+ years of robotics research, autonomous robots are still largely incapable of performing tasks at human-level performance in the physical world generalizing across (1) robot embodiments (different manipulators, different locomotion platforms, etc.) and (2) tasks (tying shoe-laces, manipulating a diverse set of objects).
 
@@ -149,3 +187,5 @@ Taken together, these limitations motivate the exploration of learning-based app
 1. **Integrate perception and control more tightly**
 2. **Adapt across tasks and embodiments** with reduced expert modeling interventions
 3. **Scale gracefully in performance** as more robotics data becomes available
+
+<!-- TODO: Side-by-side sketch: "Classical pipeline" boxes vs "Learning-based" end-to-end block. -->
