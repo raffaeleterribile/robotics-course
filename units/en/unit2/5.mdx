@@ -103,340 +103,244 @@ If you’re choosing a first project, start with a small imitation learning task
 
 ## Final Chapter Quiz
 
-Test your comprehensive understanding of the foundational concepts in robot learning:
+Test your understanding of the Classical Robotics unit. Choose the best answer for each question.
 
-### 1. What are the three main pillars of the LeRobotDataset format?
+### 1. Which set best categorizes types of robot motion discussed in this unit?
 
 <Question
 	choices={[
 		{
-			text: "Training, Validation, and Test data",
-			explain: "These are data splits, not the architectural components of LeRobotDataset."
+			text: "Navigation, mapping, and planning",
+			explain: "These are pipeline functions, not motion categories."
 		},
 		{
-			text: "Tabular Data, Visual Data, and Metadata",
-			explain: "These three components handle sensor readings, camera feeds, and dataset structure information respectively.",
-            correct: true
+			text: "Manipulation, locomotion, and mobile manipulation",
+			explain: "These are the three motion categories described in the unit and latex section.",
+	            correct: true
 		},
 		{
-			text: "Simulation, Real Robot, and Hybrid data",
-			explain: "These describe data sources, not the storage architecture."
+			text: "Simulation, perception, and control",
+			explain: "These refer to environments or pipeline components, not motion categories."
 		},
-        {
-			text: "Observations, Actions, and Rewards",
-			explain: "While these are important data types, they don't describe the architectural pillars."
+	        {
+			text: "End-effector, joints, and sensors",
+			explain: "These are components, not motion categories."
 		}
 	]}
 />
 
-### 2. Which of the following best describes the fundamental shift happening in robotics today?
+### 2. What is the essential difference between forward kinematics (FK) and inverse kinematics (IK)?
 
 <Question
 	choices={[
 		{
-			text: "From expensive robots to cheaper robots",
-			explain: "While cost reduction is important, it's not the fundamental paradigm shift."
+			text: "FK maps joint angles to end-effector pose, whereas IK maps a desired pose to joint angles",
+			explain: "Matches the unit and latex definition of FK and IK.",
+	            correct: true
 		},
 		{
-			text: "From classical model-based control to data-driven learning approaches",
-			explain: "This captures the core transformation: moving from hand-crafted models to learning from data.",
-            correct: true
+			text: "FK is about velocities and IK is about positions",
+			explain: "Velocities are handled in differential kinematics; FK/IK are mappings between configuration and task space."
 		},
 		{
-			text: "From simulation to real-world deployment",
-			explain: "This is a deployment consideration, not the fundamental paradigm shift."
+			text: "FK is only for 2‑DoF robots",
+			explain: "FK/IK apply to robots with arbitrary DoF."
 		},
-        {
-			text: "From single robots to robot swarms",
-			explain: "While multi-robot systems are important, this isn't the main shift discussed."
+	        {
+			text: "IK is always faster to compute than FK",
+			explain: "IK is generally harder; FK is usually straightforward."
 		}
 	]}
 />
 
-### 3. What is the main challenge that classical robotics faces when dealing with real-world complexity?
+### 3. In differential kinematics, what does the Jacobian J(q) represent?
 
 <Question
 	choices={[
 		{
-			text: "Robots are too expensive to deploy widely.",
-			explain: "Cost is a barrier, but not the main technical challenge of classical approaches."
+			text: "A mapping from joint velocities to end‑effector velocities",
+			explain: "ṗ = J(q) q̇ is the fundamental relation (latex Section 02).",
+	            correct: true
 		},
 		{
-			text: "Classical methods require extensive mathematical modeling that becomes prohibitively difficult for complex scenarios.",
-			explain: "The need to explicitly model every aspect of robot-environment interaction becomes intractable in complex, uncertain environments.",
-            correct: true
+			text: "A mapping from end‑effector positions to joint torques",
+			explain: "That would involve dynamics, not the kinematic Jacobian here."
 		},
 		{
-			text: "Classical robots move too slowly for practical applications.",
-			explain: "Speed isn't the fundamental limitation - many classical systems are very fast."
+			text: "The feasible workspace of the robot",
+			explain: "Workspace depends on link lengths and limits, not J(q) alone."
 		},
-        {
-			text: "Classical methods only work in laboratory settings.",
-			explain: "While lab-to-real transfer is challenging, classical methods do work in many real-world applications."
+	        {
+			text: "A motion planner for obstacle avoidance",
+			explain: "Planning is a separate module."
 		}
 	]}
 />
 
-### 4. In the context of robot learning, what does "end-to-end learning" mean?
+### 4. The closed‑form differential IK solution uses J(q)^+. What does the superscript '+' denote?
 
 <Question
 	choices={[
 		{
-			text: "Training a robot from the beginning to the end of a task.",
-			explain: "This describes task completion, not the learning architecture."
+			text: "The Moore–Penrose pseudo‑inverse",
+			explain: "This is stated explicitly in the unit and latex.",
+	            correct: true
 		},
 		{
-			text: "Learning that takes a very long time to complete.",
-			explain: "End-to-end refers to the architecture, not the duration of learning."
+			text: "The transpose of the Jacobian",
+			explain: "J^T is not what '+' denotes."
 		},
 		{
-			text: "Training the entire pipeline from raw sensors to actions as a single system.",
-			explain: "End-to-end learning optimizes the complete perception-to-action pipeline together, rather than training separate modules.",
-            correct: true
+			text: "The determinant of the Jacobian",
+			explain: "Determinant is a scalar; '+' indicates pseudo‑inverse."
 		},
-        {
-			text: "Learning that works on any type of robot.",
-			explain: "While generalization is a goal, end-to-end refers to the system architecture."
+	        {
+			text: "The adjugate of the Jacobian",
+			explain: "Not used here."
 		}
 	]}
 />
 
-### 5. Which of the following is NOT a limitation of dynamics-based robotics approaches?
+### 5. In the proportional feedback law \(\dot q = J^+(\dot p^* + k_p \Delta p)\), what is \(\Delta p\)?
 
 <Question
 	choices={[
 		{
-			text: "Integration challenges between different pipeline modules",
-			explain: "This is indeed a major limitation - errors compound through modular pipelines."
+			text: "The position error: desired minus measured pose, \(p^* - p(q)\)",
+			explain: "Matches the definition in the unit and latex Section 02.",
+	            correct: true
 		},
 		{
-			text: "Limited scalability to multi-modal data and multi-task settings",
-			explain: "This is a key limitation - classical approaches struggle with high-dimensional, diverse inputs."
+			text: "The joint error: desired minus measured configuration",
+			explain: "The equation uses task‑space error, not joint‑space error."
 		},
 		{
-			text: "Ability to work well in controlled, well-understood environments",
-			explain: "This is actually a strength of classical approaches, not a limitation.",
-            correct: true
+			text: "A friction compensation term",
+			explain: "Friction is not modeled in this kinematic controller."
 		},
-        {
-			text: "Overlooking trends in the availability of large robotics datasets",
-			explain: "This is a limitation - classical methods don't benefit from large-scale data."
+	        {
+			text: "A damping factor for the pseudo‑inverse",
+			explain: "Damping is a separate modification, not \nabla p."
 		}
 	]}
 />
 
-### 6. What makes LeRobot particularly valuable for the robotics community?
+### 6. How do obstacles and joint limits affect IK in the planar manipulator example?
 
 <Question
 	choices={[
 		{
-			text: "It only supports the most expensive, high-end robots.",
-			explain: "LeRobot actually focuses on accessible, low-cost platforms to democratize robotics."
+			text: "They restrict the feasible set of configurations and make IK harder",
+			explain: "Latex Section 02 shows constraints narrowing \nmathcal{Q} and complicating IK.",
+	            correct: true
 		},
 		{
-			text: "It democratizes access to state-of-the-art robot learning by providing end-to-end integration and supporting accessible hardware.",
-			explain: "LeRobot makes advanced techniques accessible to everyone, not just well-funded labs.",
-            correct: true
+			text: "They have no effect on IK solutions",
+			explain: "This contradicts the constraints discussion."
 		},
 		{
-			text: "It eliminates the need to understand any robotics concepts.",
-			explain: "LeRobot simplifies implementation but understanding robotics concepts is still valuable."
+			text: "They only change the FK mapping",
+			explain: "FK formula stays the same; feasibility changes."
 		},
-        {
-			text: "It only works with classical control methods.",
-			explain: "LeRobot specifically focuses on learning-based approaches, not classical control."
+	        {
+			text: "They guarantee a unique IK solution",
+			explain: "Constraints can remove solutions or make multiple remain."
 		}
 	]}
 />
 
-### 7. What is the primary advantage of using learning-based approaches for robotics?
+### 7. Which statement best characterizes classical robotics pipelines as presented in this unit?
 
 <Question
 	choices={[
 		{
-			text: "They are always more accurate than classical methods.",
-			explain: "Accuracy depends on the specific application - the advantage is more about generalization and adaptability."
+			text: "They are modular stacks with fixed interfaces (perception, state estimation, planning, control)",
+			explain: "Matches the modular pipeline described in latex Section 02.",
+	            correct: true
 		},
 		{
-			text: "They can generalize across tasks and robot embodiments while scaling with available data.",
-			explain: "This captures the key advantages: generalization capability and the ability to improve with more data.",
-            correct: true
+			text: "They are single end‑to‑end learned policies",
+			explain: "That describes learning‑based approaches, not classical."
 		},
 		{
-			text: "They require no mathematical knowledge to implement.",
-			explain: "Mathematical understanding is still valuable, even for learning-based approaches."
+			text: "They do not require expert tuning",
+			explain: "Expert tuning is a known limitation of classical pipelines."
 		},
-        {
-			text: "They work immediately without any training data.",
-			explain: "Learning-based approaches specifically require training data to function."
+	        {
+			text: "They inherently integrate raw high‑dimensional inputs",
+			explain: "Integration of high‑dimensional inputs is a challenge for classical methods."
 		}
 	]}
 />
 
-### 8. Which statement best describes the future direction of robotics?
+### 8. Which set lists the core limitations highlighted for dynamics‑based approaches?
 
 <Question
 	choices={[
-		{
-			text: "Classical methods will be completely replaced by learning methods.",
-			explain: "The future likely involves hybrid approaches that combine the best of both paradigms."
-		},
-		{
-			text: "Hybrid approaches combining classical insights with learning capabilities will dominate.",
-			explain: "This represents the most promising direction: using physics knowledge to guide learning while maintaining adaptability.",
-            correct: true
-		},
-		{
-			text: "Only simulation-based robotics will be practical.",
-			explain: "Real-world robotics remains the ultimate goal, with simulation as a training tool."
-		},
-        {
-			text: "Individual robots will be replaced entirely by robot swarms.",
-			explain: "Both individual robots and multi-robot systems have important roles to play."
-		}
-	]}
-/>
-
-### 9. What is the main difference between forward kinematics (FK) and inverse kinematics (IK)?
-
-<Question
-	choices={[
-		{
-			text: "FK is faster to compute than IK.",
-			explain: "While FK is often faster, this isn't the fundamental difference between them."
-		},
-		{
-			text: "FK maps from joint angles to end-effector position, while IK maps from desired position to required joint angles.",
-			explain: "This captures the essential difference: FK goes from configuration space to task space, IK goes the reverse direction.",
-            correct: true
-		},
-		{
-			text: "FK works with velocities while IK works with positions.",
-			explain: "Both FK and IK can work with positions - you're thinking of differential kinematics."
-		},
-        {
-			text: "FK is used for planning while IK is used for control.",
-			explain: "Both FK and IK are used in various stages of robotics pipelines."
-		}
-	]}
-/>
-
-### 10. Which of the following best describes differential inverse kinematics?
-
-<Question
-	choices={[
-		{
-			text: "It solves for joint positions using calculus-based optimization.",
-			explain: "Differential IK works with velocities, not positions directly."
-		},
-		{
-			text: "It uses the Jacobian matrix to relate joint velocities to end-effector velocities.",
-			explain: "This is the key insight: ṗ = J(q)q̇ allows us to work in velocity space where solutions are often simpler.",
-            correct: true
-		},
-		{
-			text: "It eliminates the need for feedback control in robotics.",
-			explain: "Differential IK often still requires feedback control to handle errors and disturbances."
-		},
-        {
-			text: "It only works for robots with two degrees of freedom.",
-			explain: "Differential IK works for robots with any number of degrees of freedom."
-		}
-	]}
-/>
-
-### 11. What are the four main limitations of dynamics-based robotics approaches discussed in this unit?
-
-<Question
-	choices={[
-		{
-			text: "Cost, complexity, speed, and accuracy",
-			explain: "While these are challenges, they're not the four specific limitations discussed."
-		},
 		{
 			text: "Integration challenges, limited scalability, modeling limitations, and overlooking data trends",
-			explain: "These are the four key limitations: pipeline brittleness, multi-modal scalability issues, imperfect world models, and inability to leverage large datasets.",
-            correct: true
+			explain: "This is the exact set emphasized in the unit and latex figure.",
+	            correct: true
 		},
 		{
-			text: "Hardware, software, sensors, and actuators",
-			explain: "These are components of robotic systems, not limitations of classical approaches."
+			text: "Cost, accuracy, speed, and energy consumption",
+			explain: "Not the four core limitations discussed here."
 		},
-        {
-			text: "Planning, perception, control, and execution",
-			explain: "These are stages in robotics pipelines, not the limitations discussed."
+		{
+			text: "Hardware reliability, software licensing, and safety standards",
+			explain: "Important topics but not the four cited limitations."
+		},
+	        {
+			text: "Planner optimality, sensor calibration, and actuator wear",
+			explain: "These are narrower engineering issues, not the core set."
 		}
 	]}
 />
 
-### 12. Why is inverse kinematics generally more difficult to solve than forward kinematics?
+### 9. What key advantage of learning‑based approaches is emphasized as a contrast to classical methods?
 
 <Question
 	choices={[
 		{
-			text: "IK requires more computational power than FK.",
-			explain: "While IK can be computationally intensive, this isn't the fundamental reason for the difficulty."
+			text: "They can learn end‑to‑end from data and generalize across tasks/embodiments",
+			explain: "Consistent with the latex and unit discussion on generalization and end‑to‑end training.",
+	            correct: true
 		},
 		{
-			text: "IK involves nonlinear equations, multiple solutions, and constraints that make analytical solutions difficult.",
-			explain: "The trigonometric functions create nonlinear systems, some positions may be unreachable, and multiple joint configurations can reach the same point.",
-            correct: true
+			text: "They eliminate the need for sensors",
+			explain: "Sensors remain essential."
 		},
 		{
-			text: "IK requires more sensors than FK.",
-			explain: "The number of sensors needed is not what makes IK more difficult."
+			text: "They require no compute resources",
+			explain: "Compute and data scale are central to learning."
 		},
-        {
-			text: "IK only works for specific types of robots.",
-			explain: "IK is a general problem that applies to most robotic systems."
+	        {
+			text: "They do not need datasets",
+			explain: "Learning approaches rely on data."
 		}
 	]}
 />
 
-### 13. What is the primary advantage of learning-based approaches over classical robotics methods?
+### 10. Why does the availability of open robotics datasets matter in this unit’s context?
 
 <Question
 	choices={[
 		{
-			text: "They are always faster to execute than classical methods.",
-			explain: "Speed isn't necessarily the primary advantage - classical methods can be very fast."
+			text: "It enables learning‑based methods to scale and transfer knowledge",
+			explain: "Matches the latex discussion of data trends motivating learning.",
+	            correct: true
 		},
 		{
-			text: "They require less computational power.",
-			explain: "Learning-based methods often require significant computational resources, especially for training."
+			text: "It reduces manufacturing costs of robot arms",
+			explain: "Manufacturing costs are separate from dataset availability."
 		},
 		{
-			text: "They can generalize across tasks and embodiments while learning from data instead of requiring explicit modeling.",
-			explain: "This captures the key advantages: generalization capability and learning from data rather than hand-crafted models.",
-            correct: true
+			text: "It removes the need for control theory entirely",
+			explain: "Control insights still matter, even with learning."
 		},
-        {
-			text: "They eliminate the need for any mathematical knowledge.",
-			explain: "Learning-based approaches still benefit from mathematical understanding, especially for hybrid methods."
-		}
-	]}
-/>
-
-### 14. In the planar manipulator example, what does the Jacobian matrix J(q) represent?
-
-<Question
-	choices={[
-		{
-			text: "The position of the end-effector as a function of joint angles.",
-			explain: "That would be the forward kinematics function p(q), not the Jacobian."
-		},
-		{
-			text: "The relationship between joint velocities and end-effector velocities.",
-			explain: "The Jacobian captures how changes in joint velocities translate to changes in end-effector velocities: ṗ = J(q)q̇.",
-            correct: true
-		},
-		{
-			text: "The force applied by each joint actuator.",
-			explain: "Forces are not represented by the Jacobian in kinematic analysis."
-		},
-        {
-			text: "The constraints imposed by obstacles in the environment.",
-			explain: "Environmental constraints are handled separately from the Jacobian matrix."
+	        {
+			text: "It guarantees perfect generalization",
+			explain: "No method guarantees perfect generalization."
 		}
 	]}
 />
