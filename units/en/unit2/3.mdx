@@ -1,8 +1,12 @@
 # Understanding Robot Kinematics
 
+In this section, we’ll build intuition for kinematics. Which is the math that links joint angles to end‑effector positions i.e. where is the hand given the joints? We will do this by walking through a concrete example.
+
 Let's explore how traditional robotics approaches robot control through a concrete example.
 
 ## From Complex to Simple: The SO-100 Example
+
+We start with a familiar robot and simplify it so we can reason step by step without losing the key ideas.
 
 <div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
@@ -13,7 +17,9 @@ The SO-100 is a 6-degree-of-freedom (6-DOF) robot arm. To understand the princip
 
 ## The Simplified Robot
 
-Our simplified robot has:
+<!-- TODO: Reimplement this in vanilla python -->
+
+To keep the math clear, our simplified robot has:
 - **Two joints** with angles θ₁ and θ₂  
 - **Two links** of equal length *l*
 - **Configuration** q = [θ₁, θ₂] ∈ [-π, +π]²
@@ -28,6 +34,8 @@ $$p(q) = \begin{pmatrix} l \cos(\theta_1) + l \cos(\theta_1 + \theta_2) \\ l \si
 
 This is called **Forward Kinematics (FK)** - mapping from joint space to task space.
 
+<!-- TODO: Small diagram: two-link arm in the plane with angles θ₁, θ₂ and link length l, showing how the two vector contributions add head-to-tail to reach p(q). -->
+
 <Tip>
 
 **Understanding the Math:** This equation comes from basic trigonometry! 
@@ -41,6 +49,8 @@ This is called **Forward Kinematics (FK)** - mapping from joint space to task sp
 
 ## Inverse Kinematics: From Position to Joints
 
+Now let’s try to invert the mapping: given a desired hand position, what joints achieve it?
+
 **Question:** Given a desired end-effector position p*, what joint angles should we use?
 
 **Answer:** This is **Inverse Kinematics (IK)** - much harder to solve!
@@ -49,6 +59,8 @@ We need to solve: $p(q) = p^*$
 
 In general, this becomes an optimization problem:
 $$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
+
+<!-- TODO: Workspace sketch: a reachable annulus for a 2‑link arm (inner radius |l₁−l₂|, outer radius l₁+l₂), with an in‑workspace and out‑of‑workspace target p*. -->
 
 <Tip warning={true}>
 
@@ -86,6 +98,8 @@ Real robots face **constraints**:
 
 These constraints make the feasible configuration space $\mathcal{Q}$ much more complex!
 
+<!-- TODO: Annotated picture: highlight forbidden regions/configurations induced by floor and shelf; show how certain θ ranges are disallowed. -->
+
 ## Key Insight
 
 Even for this **simple 2-DOF robot**, solving IK with constraints is non-trivial. Real robots have:
@@ -95,6 +109,12 @@ Even for this **simple 2-DOF robot**, solving IK with constraints is non-trivial
 - **Uncertain models**
 
 Traditional approaches require **extensive mathematical modeling** and **expert knowledge** for each specific case.
+
+<Tip>
+
+Mental model: FK is a direct calculator (q → p) and is usually easy; IK is a search (p → q) and becomes hard as soon as you add workspace limits, obstacles, or joint constraints. When IK gets brittle, we’ll switch to differential reasoning (velocities) in the next step.
+
+</Tip>
 
 ---
 
