@@ -1,5 +1,7 @@
 # Control Systems and Their Limitations
 
+In this section, we step from kinematics to control. We first show how to reason with velocities (differential kinematics), then close the loop with feedback, and finally summarize where classical pipelines struggle in practice.
+
 ## Differential Kinematics: A Smarter Approach
 
 Instead of solving for joint positions directly, we can work with **velocities**:
@@ -11,6 +13,8 @@ $$\dot{p} = J(q) \dot{q}$$
 
 Where $J(q)$ is the **Jacobian matrix** - the relationship between joint and task space velocities.
 
+<!-- TODO: Micro-diagram: small vector at q in configuration space mapped by J(q) to a small vector at p in task space. -->
+
 ### Differential IK Solution
 Given a desired end-effector velocity $\dot{p}^*$, find joint velocities:
 
@@ -19,6 +23,8 @@ $$\dot{q} = J(q)^+ \dot{p}^*$$
 Where $J(q)^+$ is the **pseudo-inverse** of the Jacobian.
 
 ## Adding Feedback Control
+
+Open-loop tracking is brittle under modeling errors and disturbances. We close the loop by feeding back the tracking error.
 
 <div style="text-align: right; width: 30%; float: right; margin-left: 20px;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
@@ -37,14 +43,24 @@ $$\dot{q} = J(q)^+ (\dot{p}^* + k_p \Delta p)$$
 
 Where $\Delta p = p^* - p(q)$ is the position error.
 
+<!-- <!-- TODO: loop diagram of the feedback flow -->
+
+<Tip>
+
+Start with small $k_p$ and increase gradually while monitoring oscillations. Use a watchdog (safety stop) and saturate commands to keep the system within safe limits.
+
+</Tip>
+
 ## Why Classical Approaches Struggle
+
+With differential reasoning and feedback, many tracking tasks are solvable—on paper. In practice, the system still breaks under real-world complexity for the reasons below.
 
 <div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
 <p><em>Four key limitations of dynamics-based robotics approaches.</em></p>
 </div>
 
-### 1. 🔧 **Integration Challenges**
+### 1. **Integration Challenges**
 Classical pipelines are built from **separate modules**:
 - Sensing → State Estimation → Planning → Control → Actuation
 
@@ -53,25 +69,27 @@ Classical pipelines are built from **separate modules**:
 - Brittle when any component fails
 - Hard to adapt to new tasks or robots
 
-### 2. 📈 **Limited Scalability**  
+### 2. **Limited Scalability**  
 Traditional methods struggle with:
 - **High-dimensional sensor data** (cameras, LIDAR)
 - **Multi-task scenarios** (each task needs custom planning)
 - **Multi-modal integration** (vision + touch + proprioception)
 
-### 3. 🧮 **Modeling Limitations**
+### 3. **Modeling Limitations**
 Real-world physics is complex:
 - **Contact dynamics** - Hard to model precisely
 - **Deformable objects** - Beyond rigid-body assumptions
 - **Friction and compliance** - Difficult to characterize
 
-### 4. 📊 **Ignoring Data Trends**
+### 4. **Ignoring Data Trends**
 Classical methods don't leverage:
 - **Growing robotics datasets** - Millions of demonstrations available
 - **Cross-robot learning** - Insights from other platforms
 - **Community knowledge** - Decentralized data collection
 
 ## The Learning Alternative
+
+To address these limitations, we contrast a classical modular pipeline with an end-to-end learning policy.
 
 <hfoptions id="robotics-approaches">
 <hfoption id="classical">
@@ -98,15 +116,17 @@ Raw Sensors → Neural Network → Actions
 ```
 
 **Benefits:**
-- ✅ **Learn from data** - Use demonstrations and experience
-- ✅ **End-to-end training** - Optimize the entire pipeline together  
-- ✅ **Generalize across tasks** - Share knowledge between different objectives
-- ✅ **Adapt to new robots** - Transfer insights across platforms
+- Learn from data - Use demonstrations and experience
+- End-to-end training - Optimize the entire pipeline together  
+- Generalize across tasks - Share knowledge between different objectives
+- Adapt to new robots - Transfer insights across platforms
 
 </hfoption>
 </hfoptions>
 
 This is the promise of **robot learning**!
+
+<!-- TODO: Side-by-side diagram: classical boxes vs a single learned policy block -->
 
 <Tip>
 
@@ -121,12 +141,18 @@ Pure learning vs pure classical is a false dichotomy - hybrid approaches often w
 
 ---
 
+## Key Takeaways
 
-💡 **Key Takeaways:**
 - Classical robotics relies on explicit mathematical models and expert knowledge
 - Forward kinematics is straightforward, but inverse kinematics can be very challenging
 - Differential kinematics works with velocities rather than positions for better control
 - Classical approaches struggle with integration, scalability, modeling accuracy, and data utilization
 - Learning-based methods offer solutions to these fundamental limitations
 - The future lies in hybrid approaches that combine classical insights with learning capabilities
+
+<Tip>
+
+Up next, we’ll show how learning-based methods (reinforcement learning and imitation learning) absorb some of this complexity by optimizing directly from data, while still borrowing ideas from control when helpful.
+
+</Tip>
 
