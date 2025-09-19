@@ -1,16 +1,20 @@
 # From Classical to Learning-Based Robotics
 
-## What We've Learned So Far
+This chapter ties the classical tools you’ve learned to the motivations for learning‑based methods, then points you to what comes next. We’ll keep it concise and add signposts so you know where to focus.
 
 <Tip>
 
-**Congratulations!** You've completed the foundational part of this course. You now understand the key concepts that motivate modern robot learning approaches.
+Don't worry if this page is a bit dense, we'll break it down in the next few units.
 
 </Tip>
 
-Let's recap the important concepts we've covered across these foundational units.
+## What We've Learned So Far
 
-**Course Overview and Motivation:** You've explored the fundamental shift occurring in robotics today, moving from classical model-based approaches toward data-driven learning methods. We've established why robot learning is becoming essential for creating more capable and generalizable robotic systems, and how tools like LeRobot are making these advanced techniques accessible to a broader community of researchers and practitioners.
+First, a quick recap of the important concepts covered across the foundational units.
+
+<!-- TODO: Small timeline diagram with milestones: Classical → Kinematics → Control → Limitations → Learning motivation. -->
+
+**Motivation for Learning-Based Robotics:** You've explored the fundamental shift occurring in robotics today, moving from classical model-based approaches toward data-driven learning methods. We've established why robot learning is becoming essential for creating more capable and generalizable robotic systems, and how tools like LeRobot are making these advanced techniques accessible to a broader community of researchers and practitioners.
 
 **LeRobot Ecosystem:** You've gained hands-on experience with LeRobot's comprehensive approach to robotics. This includes understanding the vision behind LeRobot as an end-to-end robotics library, learning about the LeRobotDataset format that handles the complexity of multi-modal robotics data, and getting practical experience with loading and processing real robotics datasets for machine learning applications.
 
@@ -20,15 +24,23 @@ Let's recap the important concepts we've covered across these foundational units
 
 Through our exploration of classical robotics, you've gained a clear understanding of why learning-based approaches represent such a significant advancement in the field.
 
-**Classical approaches face fundamental limitations** that become apparent when dealing with real-world complexity. These methods require extensive mathematical modeling of every aspect of the robot's environment and interactions, which becomes prohibitively difficult for complex scenarios. They struggle to integrate multi-modal data sources like vision, touch, and proprioception in a unified way. Perhaps most importantly, classical approaches don't scale well across different tasks or robot embodiments - each new application typically requires significant re-engineering and expert knowledge.
+**Classical approaches face fundamental limitations** that become apparent when dealing with real-world complexity. These methods require extensive mathematical modeling of every aspect of the robot's environment and interactions, which becomes prohibitively difficult for complex scenarios.
 
-**Learning-based approaches offer compelling advantages** that directly address these limitations. Instead of requiring experts to model every aspect of the problem, these methods can learn appropriate behaviors and representations directly from data. They naturally handle multi-modal, high-dimensional inputs through neural network architectures designed for such complexity. Learning approaches can generalize across different tasks and even different robot embodiments, sharing knowledge in ways that classical methods cannot. Finally, they scale with the availability of data and computational resources, improving performance as more examples and computing power become available.
+They struggle to integrate multi-modal data sources like vision, touch, and proprioception in a unified way. Perhaps most importantly, classical approaches don't scale well across different tasks or robot embodiments—each new application typically requires significant re-engineering and expert knowledge.
+
+**Learning-based approaches offer compelling advantages** that directly address these limitations. Instead of requiring experts to model every aspect of the problem, these methods can learn appropriate behaviors and representations directly from data.
+
+They naturally handle multi-modal, high-dimensional inputs through neural network architectures designed for such complexity, can generalize across different tasks and even different robot embodiments, and scale with the availability of data and computational resources.
+
+<!-- TODO: graphic of pros and cons of classical and learning-based approaches -->
 
 ## What's Coming Next
 
-The foundational knowledge you've gained prepares you for the advanced topics that will be covered in future units of this course.
+The foundational knowledge you've gained prepares you for the advanced topics that follow. 
 
-**Reinforcement Learning for Robotics** will explore how robots can learn optimal behaviors through trial and error interactions with their environment. You'll learn about designing appropriate reward signals for robotics tasks, understand policy gradient methods that enable robots to improve their performance over time, and tackle the crucial challenge of sample efficiency - learning effectively with limited real-world interaction data. We'll also cover how LeRobot implements these reinforcement learning algorithms in practice.
+<!-- TODO: Roadmap diagram -->
+
+**Reinforcement Learning for Robotics** will explore how robots can learn optimal behaviors through trial and error interactions with their environment. You'll learn about designing appropriate reward signals for robotics tasks, understand policy gradient methods that enable robots to improve their performance over time, and tackle the crucial challenge of sample efficiency—learning effectively with limited real-world interaction data. We'll also cover how LeRobot implements these reinforcement learning algorithms in practice.
 
 **Imitation Learning and Behavioral Cloning** will demonstrate how robots can acquire complex skills by observing and copying expert demonstrations. This approach is particularly valuable because it allows robots to learn from human expertise without requiring explicit reward engineering. You'll understand how to handle the distribution shift problem that occurs when robots encounter situations not seen in training data, explore advanced imitation learning techniques beyond simple behavioral cloning, and gain practical experience implementing these methods using LeRobot's tools.
 
@@ -57,7 +69,7 @@ Through this foundational section of the course, you've developed both technical
 </Tip>
 
 
-💡 **Course Summary:**
+## Course Summary
 - Robot learning represents a paradigm shift from model-based to data-driven approaches
 - LeRobot democratizes access to state-of-the-art robot learning techniques
 - Classical robotics provides important foundations but has fundamental scalability limitations
@@ -69,15 +81,21 @@ Through this foundational section of the course, you've developed both technical
 
 As you continue your robot learning journey:
 
-📚 **Keep Learning:**
+**Keep Learning:**
 - Explore LeRobot documentation: [huggingface.co/docs/lerobot](https://huggingface.co/docs/lerobot)
 - Try LeRobot examples: [github.com/huggingface/lerobot](https://github.com/huggingface/lerobot)
 - Join the community discussions
 
-🤝 **Get Involved:**
+**Get Involved:**
 - Contribute datasets to the community
 - Share your robot learning experiments
 - Help improve LeRobot tools and documentation
+
+<Tip>
+
+If you’re choosing a first project, start with a small imitation learning task using LeRobotDataset (pick‑and‑place on SO‑100/SO‑101). You’ll get end‑to‑end experience—data, model, evaluation—without needing reward design or simulators.
+
+</Tip>
 
 ---
 
