@@ -270,3 +270,5 @@ secrets.json
 # Virtual environments
 robotics-env/
 course-env/
+
+figures/*
