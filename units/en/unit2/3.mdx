@@ -8,10 +8,9 @@ Let's explore how traditional robotics approaches robot control through a concre
 
 We start with a familiar robot and simplify it so we can reason step by step without losing the key ideas.
 
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
-<p><em>The SO-100 arm simplified to a 2D planar manipulator by constraining some joints.</em></p>
-</div>
+
+The SO-100 arm simplified to a 2D planar manipulator by constraining some joints.
 
 The SO-100 is a 6-degree-of-freedom (6-DOF) robot arm. To understand the principles, let's simplify it to a **2-DOF planar manipulator** by constraining some joints.
 
@@ -76,20 +75,17 @@ This is why robotics engineers spend so much time on IK algorithms!
 
 ## The Challenge of Constraints
 
-<div style="display: flex; justify-content: space-around; align-items: center;">
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
-<p><em>Free to move</em></p>
-</div>
-<div style="text-align: center;">
+
+*Free to move*
+
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
-<p><em>Constrained by floor</em></p>
-</div>
-<div style="text-align: center;">
+
+*Constrained by floor*
+
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
-<p><em>Multiple obstacles</em></p>
-</div>
-</div>
+
+*Multiple obstacles*
 
 Real robots face **constraints**:
 - **Physical limits** - Can't move through the floor
@@ -115,7 +111,3 @@ Traditional approaches require **extensive mathematical modeling** and **expert 
 Mental model: FK is a direct calculator (q → p) and is usually easy; IK is a search (p → q) and becomes hard as soon as you add workspace limits, obstacles, or joint constraints. When IK gets brittle, we’ll switch to differential reasoning (velocities) in the next step.
 
 </Tip>
-
----
-
-**Next:** Let's see how differential kinematics tries to make this more tractable, and where it still struggles.

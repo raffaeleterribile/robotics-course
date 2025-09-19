@@ -95,7 +95,6 @@ Cheaper, more accessible robots are starting to rival traditional platforms like
 
 ### Forward and Inverse Kinematics
 
-
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
 
 The SO-100 arm is a 6‑DoF manipulator arm. Preventing some of its joints (shoulder pan, wrist flex and wrist roll) from actuating, it can be represented as a traditional 2‑DoF planar manipulator (the gripper joint in the end‑effector is not counted toward the degrees of freedom used to produce motion).
@@ -104,20 +103,17 @@ Consider the (simple) case where a SO‑100 is restrained from actuating (1) the
 
 Let us make the simplifying assumption that actuators can produce rotations up to $2\pi$ radians. All these simplifying assumptions leave us with the planar manipulator where we can control the angles $\theta_1$ and $\theta_2$, jointly referred to as the robot's *configuration*, and indicated with $q = [\theta_1, \theta_2 ] \in [-\pi, +\pi]^2$.
 
-<div style="display: flex; justify-content: space-around; align-items: center;">
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
-<p><em>Free to move</em></p>
-</div>
-<div style="text-align: center;">
+
+Free to move
+
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
-<p><em>Constrained by the surface</em></p>
-</div>
-<div style="text-align: center;">
+
+Constrained by the surface
+
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
-<p><em>Constrained by surface and (fixed) obstacle</em></p>
-</div>
-</div>
+
+Constrained by surface and (fixed) obstacle
 
 Considering this example, we can analytically write the end-effector's position $p \in \mathbb{R}^2$ as a function of the robot's configuration, $p = p(q)$:
 
@@ -153,10 +149,10 @@ This often admits the closed-form solution $\dot{q} = J(q)^+ \dot{p}^*$, where $
 
 ### Adding Feedback Loops
 
-<div style="text-align: right; width: 30%; float: right; margin-left: 20px;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
-<p><em>Planar manipulator robot in the presence of a moving obstacle.</em></p>
-</div>
+
+Planar manipulator robot in the presence of a moving obstacle.
+
 
 While very effective when a goal trajectory has been well specified, the performance of differential IK can degrade significantly in the presence of modeling/tracking errors, or in the presence of non-modeled dynamics in the environment.
 
@@ -172,10 +168,10 @@ This brings us to the “so what?”: where do these classical tools struggle in
 
 Despite the last 60+ years of robotics research, autonomous robots are still largely incapable of performing tasks at human-level performance in the physical world generalizing across (1) robot embodiments (different manipulators, different locomotion platforms, etc.) and (2) tasks (tying shoe-laces, manipulating a diverse set of objects).
 
-<div style="text-align: center;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
-<p><em>Dynamics-based approaches to robotics suffer from several limitations: (1) orchestrating multiple components poses integration challenges; (2) the need to develop custom processing pipelines for the sensing modalities and tasks considered hinders scalability; (3) simplified analytical models of physical phenomena limit real-world performance. Lastly, (4) dynamics-based methods overlook trends in the availability and growth of robotics data.</em></p>
-</div>
+
+Dynamics-based approaches to robotics suffer from several limitations: (1) orchestrating multiple components poses integration challenges; (2) the need to develop custom processing pipelines for the sensing modalities and tasks considered hinders scalability; (3) simplified analytical models of physical phenomena limit real-world performance. Lastly, (4) dynamics-based methods overlook trends in the availability and growth of robotics data.
+
 
 ### Key Limitations
 

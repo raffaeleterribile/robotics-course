@@ -26,10 +26,9 @@ Where $J(q)^+$ is the **pseudo-inverse** of the Jacobian.
 
 Open-loop tracking is brittle under modeling errors and disturbances. We close the loop by feeding back the tracking error.
 
-<div style="text-align: right; width: 30%; float: right; margin-left: 20px;">
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
-<p><em>Dealing with moving obstacles requires feedback control.</em></p>
-</div>
+
+*Dealing with moving obstacles requires feedback control.*
 
 Real environments are **dynamic and uncertain**. We need feedback to handle:
 - **Modeling errors** - Our equations aren't perfect
@@ -55,10 +54,11 @@ Start with small $k_p$ and increase gradually while monitoring oscillations. Use
 
 With differential reasoning and feedback, many tracking tasks are solvable—on paper. In practice, the system still breaks under real-world complexity for the reasons below.
 
-<div style="text-align: center;">
+
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
-<p><em>Four key limitations of dynamics-based robotics approaches.</em></p>
-</div>
+
+*Four key limitations of dynamics-based robotics approaches.*
+
 
 ### 1. **Integration Challenges**
 Classical pipelines are built from **separate modules**:
