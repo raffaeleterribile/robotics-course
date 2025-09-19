@@ -271,3 +271,4 @@ secrets.json
 robotics-env/
 course-env/
 figures
+figures/*
