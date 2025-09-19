@@ -90,7 +90,7 @@ Recently, the development of low-cost manipulators like the ALOHA, ALOHA-2 and S
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-cost-accessibility.png" alt="Robot Cost Comparison" style="width: 40%;" />
 
-Cheaper, more accessible robots are starting to rival traditional platforms like the Panda arm platforms in adoption in resource-constrained scenarios. The SO-100, in particular, has a cost in the 100s of Euros, and can be entirely 3D-printed in hours, while the industrially-manufactured Panda arm costs tens of thousands of Euros and is not openly available.</em></p>
+Cheaper, more accessible robots are starting to rival traditional platforms like the Panda arm platforms in adoption in resource-constrained scenarios. The SO-100, in particular, has a cost in the 100s of Euros, and can be entirely 3D-printed in hours, while the industrially-manufactured Panda arm costs tens of thousands of Euros and is not openly available.
 
 
 ### Forward and Inverse Kinematics
@@ -105,15 +105,15 @@ Let us make the simplifying assumption that actuators can produce rotations up t
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
 
-Free to move
+*Free to move*
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
 
-Constrained by the surface
+*Constrained by the surface*
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
 
-Constrained by surface and (fixed) obstacle
+*Constrained by surface and (fixed) obstacle*
 
 Considering this example, we can analytically write the end-effector's position $p \in \mathbb{R}^2$ as a function of the robot's configuration, $p = p(q)$:
 
