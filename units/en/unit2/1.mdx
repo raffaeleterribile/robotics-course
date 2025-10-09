@@ -1,26 +1,26 @@
 # Classical Robotics
 
-In this section, we build a foundation on classical robotics which later you’ll use to understand why learning-based methods are so powerful. 
+In this section, we'll build a foundation in classical robotics that will help you understand why learning-based methods are so powerful. 
 
-We start with how motion is generated, then look at common robot types of motion, and finally work through a concrete kinematics example before discussing limitations.
+We'll start by exploring how robots generate motion, look at common types of robot movement, and work through a concrete example before discussing the limitations that motivate modern approaches.
 
 <Tip>
 
 ## Key Takeaway 
 
-Learning-based approaches to robotics are motivated by fundamental needs that traditional dynamics-based techniques have historically overlooked. 
+Learning-based approaches to robotics address fundamental challenges that traditional methods struggle with. 
 
-Modern robotics requires methods that can generalize across different tasks and robot embodiments, allowing one approach to work effectively across many different problems rather than requiring custom solutions for each scenario. There's also a growing need to reduce dependency on human expertise, enabling systems to learn appropriate behaviors from data rather than requiring experts to hand-craft rules and models for every situation. Finally, the field needs approaches that can leverage the rapidly growing availability of robotics datasets, taking advantage of the collective knowledge captured in these large-scale data collections.
+Modern robotics needs methods that can work across different tasks and robot types, allowing one approach to work effectively in many situations rather than requiring custom solutions for each problem. We also need to reduce our dependency on human experts who manually design rules and models for every situation. Finally, the field needs approaches that can take advantage of the rapidly growing collection of robotics datasets, learning from the collective knowledge captured in these large-scale data collections.
 
 </Tip>
 
-## Explicit and Implicit Models
+## Different Approaches to Robot Motion
 
-We begin with the high-level picture: how do different approaches generate motion?
+Let's start with the big picture: how do different approaches make robots move?
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-approaches.png" alt="A diagram showing different approaches to robot motion generation, organized into two main categories: explicit dynamics-based methods on the left (including classical control, model predictive control, and trajectory optimization) and implicit learning-based methods on the right (including reinforcement learning, imitation learning, and neural networks). The diagram illustrates the spectrum from model-based to data-driven approaches in robotics." style="width: 50%;" />
 
-Overview of methods to generate motion (clearly non-exhaustive). The different methods can be grouped based on whether they explicitly (dynamics-based) or implicitly (learning-based) model robot-environment interactions.
+Different methods for generating robot motion can be grouped based on whether they use explicit mathematical models or learn patterns implicitly from data.
 
 This is merely an overview of different methods to generate motion, and is clearly non-exhaustive. Still, it provides a good primer on what the most common approaches are in this circumstance. The most important grouping by far depend on whether the different methods explicitly (_dynamics-based_) or implicitly (_learning-based_) model robot-environment interactions.
 
@@ -86,11 +86,9 @@ Cheaper, more accessible robots are starting to rival traditional platforms like
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
 
-The SO-100 arm is a 6‑DoF manipulator arm. Preventing some of its joints (shoulder pan, wrist flex and wrist roll) from actuating, it can be represented as a traditional 2‑DoF planar manipulator (the gripper joint in the end‑effector is not counted toward the degrees of freedom used to produce motion).
+The SO-100 arm simplified to a 2D planar manipulator by preventing some joints from moving.
 
-Consider the (simple) case where a SO‑100 is restrained from actuating (1) the shoulder pan and (2) the wrist flex and roll motors. This reduces the degrees of freedom of the SO‑100 from the original 5+1 (5 joints + 1 gripper) to 2+1 (shoulder lift, elbow flex + gripper).
-
-Let us make the simplifying assumption that actuators can produce rotations up to $2\pi$ radians. All these simplifying assumptions leave us with the planar manipulator where we can control the angles $\theta_1$ and $\theta_2$, jointly referred to as the robot's *configuration*, and indicated with $q = [\theta_1, \theta_2 ] \in [-\pi, +\pi]^2$.
+Consider a simplified version of the SO-100 where we prevent some joints from moving. This reduces the complexity from 6 degrees of freedom to just 2 (plus the gripper). We can control two angles θ₁ and θ₂, which together define the robot's configuration: q = [θ₁, θ₂].
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
 

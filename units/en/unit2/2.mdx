@@ -2,19 +2,19 @@
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="Robotics Platforms" style="width: 70%;" />
 
-Different kinds of motions are achieved with potentially very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas.
+Different kinds of motions require very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas.
 
-In this short section, we’ll organize the space of robot behaviors so you can quickly recognize what kind of problem you’re solving and pick appropriate tools.
+In this section, we'll organize the space of robot behaviors so you can quickly recognize what kind of problem you're solving and pick appropriate tools.
 
-In the vast majority of instances, robotics deals with producing motion via actuating joints connecting nearly entirely-rigid links. A key distinction between focus areas in robotics is based on whether the generated motion modifies (1) the absolute state of the environment (via dexterity), (2) the relative state of the robot with respect to its environment (exercising mobility skills), or (3) a combination of the two.
+Most robotics involves creating motion by controlling joints that connect rigid links. The key distinction between different areas of robotics comes down to what the robot is trying to change: the world around it, its own position in the world, or both.
 
-At a high level, most problems fall into one of three categories:
+Most problems fall into one of three categories:
 
-Effects such as (1) are typically achieved *through* the robot, i.e. generating motion to perform an action inducing a desirable modification, effectively *manipulating* the environment (**manipulation**).
+**Manipulation** involves the robot changing the environment around it while staying in a fixed location. The robot acts on the world - grasping objects, assembling parts, or using tools. Think of a factory robot arm that picks up parts and puts them together.
 
-Motions like (2) may result in changes in the robot's physical location within its environment. Generally, modifications to a robot's location within its environment may be considered instances of the general **locomotion** problem, further specified as *wheeled* or *legged* locomotion based on whenever a robot makes use of wheels or leg(s) to move in the environment.
+**Locomotion** involves the robot changing its position in the environment. This includes wheeled robots (like mobile bases and autonomous cars) and legged robots (like walking robots and quadrupeds) that move through their environment.
 
-Lastly, an increased level of dynamism in the robot-environment interactions can be obtained combining (1) and (2), thus designing systems capable to interact with *and* move within their environment. This category is problems is typically termed **mobile manipulation**, and is characterized by a typically much larger set of control variables compared to either locomotion or manipulation alone.
+**Mobile Manipulation** combines both capabilities, creating systems that can both move through their environment and manipulate objects. These problems are more complex because they need to coordinate many more control variables than either locomotion or manipulation alone.
 
 <!-- TODO: Diagram: three side-by-side boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 examples each (e.g., pick-and-place; quadruped walking; mobile base with arm). Include typical observations (RGB, depth, proprioception) and action spaces (joint velocities vs base velocity). -->
 
