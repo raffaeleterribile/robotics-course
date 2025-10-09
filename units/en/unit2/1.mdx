@@ -4,15 +4,12 @@ In this section, we'll build a foundation in classical robotics that will help y
 
 We'll start by exploring how robots generate motion, look at common types of robot movement, and work through a concrete example before discussing the limitations that motivate modern approaches.
 
-<Tip>
-
-## Key Takeaway 
-
-Learning-based approaches to robotics address fundamental challenges that traditional methods struggle with. 
-
-Modern robotics needs methods that can work across different tasks and robot types, allowing one approach to work effectively in many situations rather than requiring custom solutions for each problem. We also need to reduce our dependency on human experts who manually design rules and models for every situation. Finally, the field needs approaches that can take advantage of the rapidly growing collection of robotics datasets, learning from the collective knowledge captured in these large-scale data collections.
-
-</Tip>
+> [!TIP]
+> ## Key Takeaway 
+>
+> Learning-based approaches to robotics address fundamental challenges that traditional methods struggle with. 
+>
+> Modern robotics needs methods that can work across different tasks and robot types, allowing one approach to work effectively in many situations rather than requiring custom solutions for each problem. We also need to reduce our dependency on human experts who manually design rules and models for every situation. Finally, the field needs approaches that can take advantage of the rapidly growing collection of robotics datasets, learning from the collective knowledge captured in these large-scale data collections.
 
 ## Different Approaches to Robot Motion
 
@@ -32,17 +29,14 @@ As a direct consequence of its multi‑disciplinary nature (to the very least, c
 
 In this section, our goal is to introduce where classical methods excel, where they struggle, and why **learning‑based approaches** are helpful.
 
-<Tip>
-
-**Explicit vs Implicit Models:**
-
-**Implicit (learning-based) approaches** take a fundamentally different strategy by learning patterns directly from data rather than requiring explicit mathematical models. These methods require less domain-specific engineering and can adapt to complex, uncertain environments that would be difficult to model analytically. Neural networks and reinforcement learning algorithms are prime examples of this approach.
-
-**Explicit (dynamics-based) approaches** rely on hand-crafted mathematical models of physics and require deep domain expertise to be implemented effectively. These methods work exceptionally well for well-understood, controlled scenarios where the physics can be precisely modeled. Classic examples include PID controllers and Model Predictive Control systems that have been the backbone of industrial robotics for decades.  
-
-**Hybrid approaches** represent an exciting middle ground, combining the reliability of physics knowledge with the adaptability of learning systems. These methods use physics knowledge to guide and constrain the learning process, often achieving better performance than either approach alone.
-
-</Tip>
+> [!TIP]
+> **Explicit vs Implicit Models:**
+>
+> **Implicit (learning-based) approaches** take a fundamentally different strategy by learning patterns directly from data rather than requiring explicit mathematical models. These methods require less domain-specific engineering and can adapt to complex, uncertain environments that would be difficult to model analytically. Neural networks and reinforcement learning algorithms are prime examples of this approach.
+>
+> **Explicit (dynamics-based) approaches** rely on hand-crafted mathematical models of physics and require deep domain expertise to be implemented effectively. These methods work exceptionally well for well-understood, controlled scenarios where the physics can be precisely modeled. Classic examples include PID controllers and Model Predictive Control systems that have been the backbone of industrial robotics for decades.  
+>
+> **Hybrid approaches** represent an exciting middle ground, combining the reliability of physics knowledge with the adaptability of learning systems. These methods use physics knowledge to guide and constrain the learning process, often achieving better performance than either approach alone.
 
 ## Different Types of Motion
 
@@ -62,11 +56,8 @@ In the vast majority of instances, robotics deals with producing motion via actu
 
 <!-- TODO: Diagram: three boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 concrete examples each; arrows showing shared sensing (vision/touch) but different action spaces. -->
 
-<Tip>
-
-Quick classifier: ask “what changes?” If mainly the world changes (object pose/state), you’re in manipulation. If mainly the robot state changes, you’re in locomotion. If both change meaningfully within the task, you’re in mobile manipulation. This simple test helps when designing observations, actions, and evaluation.  
-
-</Tip>
+> [!TIP]
+> Quick classifier: ask "what changes?" If mainly the world changes (object pose/state), you're in manipulation. If mainly the robot state changes, you're in locomotion. If both change meaningfully within the task, you're in mobile manipulation. This simple test helps when designing observations, actions, and evaluation.
 
 We’ll reuse this taxonomy when discussing datasets (what sensors you need) and policies (what action spaces you predict) in the next sections.
 
@@ -114,11 +105,8 @@ $$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
 
 Exact analytical solutions to IK are even less appealing when one considers the presence of obstacles in the robot's workspace, resulting in constraints on the possible values of $q$.
 
-<Tip>
-
-If the math feels dense, focus on the mapping: FK answers “where is the hand given the joints?”, IK asks “what joints reach that hand position?”. The rest of the unit shows why the IK direction becomes hard in realistic settings.  
-
-</Tip>
+> [!TIP]
+> If the math feels dense, focus on the mapping: FK answers "where is the hand given the joints?", IK asks "what joints reach that hand position?". The rest of the unit shows why the IK direction becomes hard in realistic settings.
 
 ### Differential Inverse Kinematics
 

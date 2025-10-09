@@ -35,16 +35,13 @@ This is called **Forward Kinematics (FK)** - mapping from joint space to task sp
 
 <!-- TODO: Small diagram: two-link arm in the plane with angles θ₁, θ₂ and link length l, showing how the two vector contributions add head-to-tail to reach p(q). -->
 
-<Tip>
-
-**Understanding the Math:** This equation comes from basic trigonometry! 
-- First link: endpoint at $(l \cos(\theta_1), l \sin(\theta_1))$
-- Second link: starts from first link's end, rotated by $\theta_1 + \theta_2$
-- Final position: sum of both link contributions
-
-**Why it matters:** For a simple robot, FK is relatively easy - given joint angles, we can always compute where the robot's hand is. More complex robots - for instance, dexterous hands, are more challenging to model. 
-
-</Tip>
+> [!TIP]
+> **Understanding the Math:** This equation comes from basic trigonometry! 
+> - First link: endpoint at $(l \cos(\theta_1), l \sin(\theta_1))$
+> - Second link: starts from first link's end, rotated by $\theta_1 + \theta_2$
+> - Final position: sum of both link contributions
+>
+> **Why it matters:** For a simple robot, FK is relatively easy - given joint angles, we can always compute where the robot's hand is. More complex robots - for instance, dexterous hands, are more challenging to model.
 
 ## Inverse Kinematics: From Position to Joints
 
@@ -61,17 +58,14 @@ $$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
 
 <!-- TODO: Workspace sketch: a reachable annulus for a 2‑link arm (inner radius |l₁−l₂|, outer radius l₁+l₂), with an in‑workspace and out‑of‑workspace target p*. -->
 
-<Tip warning={true}>
-
-**Why IK is Hard:**
-- **Multiple solutions** - Same end position can be reached with different joint angles
-
-- **Nonlinear equations** - Some functions make analytical solutions difficult
-- **Constraints** - Joint limits and obstacles further complicate the problem
-
-This is why robotics engineers spend so much time on IK algorithms!
-
-</Tip>
+> [!WARNING]
+> **Why IK is Hard:**
+> - **Multiple solutions** - Same end position can be reached with different joint angles
+>
+> - **Nonlinear equations** - Some functions make analytical solutions difficult
+> - **Constraints** - Joint limits and obstacles further complicate the problem
+>
+> This is why robotics engineers spend so much time on IK algorithms!
 
 ## The Challenge of Constraints
 
@@ -104,8 +98,5 @@ Even for this **simple 2-DOF robot**, solving IK with constraints is non-trivial
 
 Traditional approaches require **extensive mathematical modeling** and **expert knowledge** for each specific case.
 
-<Tip>
-
-Mental model: FK is a direct calculator (q → p) and is usually easy; IK is a search (p → q) and becomes hard as soon as you add workspace limits, obstacles, or joint constraints. When IK gets brittle, we’ll switch to differential reasoning (velocities) in the next step.
-
-</Tip>
+> [!TIP]
+> Mental model: FK is a direct calculator (q → p) and is usually easy; IK is a search (p → q) and becomes hard as soon as you add workspace limits, obstacles, or joint constraints. When IK gets brittle, we'll switch to differential reasoning (velocities) in the next step.

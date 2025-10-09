@@ -8,19 +8,13 @@ LeRobot is an open-source library for robotics developed by Hugging Face. Think 
 
 What makes LeRobot special is that it's "vertically integrated." This means it provides a unified way to work with real robots, handle complex multi-modal data (like combining camera feeds with sensor readings), and integrates smoothly with the PyTorch and Hugging Face tools you might already know. Essentially, LeRobot aims to be your one-stop library for robot learning projects.
 
-<Tip>
-
-**Supported Robots:** LeRobot currently supports accessible platforms such as **SO-100/SO-101** (3D‑printable arms) and **ALOHA/ALOHA‑2** (bimanual manipulation). For the up‑to‑date list of supported platforms, see the [official documentation](https://huggingface.co/docs/lerobot).
-
-</Tip>
+> [!TIP]
+> **Supported Robots:** LeRobot currently supports accessible platforms such as **SO-100/SO-101** (3D‑printable arms) and **ALOHA/ALOHA‑2** (bimanual manipulation). For the up‑to‑date list of supported platforms, see the [official documentation](https://huggingface.co/docs/lerobot).
 
 One key advantage is that LeRobot uses a standardized approach for connecting to different robot platforms. This means adding support for new robots requires much less work than starting from scratch. The library also introduces `LeRobotDataset`, a specialized format for robotics data that the open-source community is already using to share datasets efficiently.
 
 LeRobot includes implementations of many cutting-edge robot learning algorithms, all built with PyTorch for efficiency. It also provides tools for running experiments and tracking results. Perhaps most importantly for real-world applications, LeRobot separates the "thinking" part (planning what to do) from the "doing" part (executing actions). This separation is crucial because it allows robots to react quickly and adapt better when things don't go exactly as planned.
 
-<Tip warning={true}>
-
-**Performance Note:** LeRobot's optimized inference stack is crucial for real-time robot control, where delays of even milliseconds can affect performance. This separation of planning and execution is a key innovation.
-
-</Tip>
+> [!WARNING]
+> **Performance Note:** LeRobot's optimized inference stack is crucial for real-time robot control, where delays of even milliseconds can affect performance. This separation of planning and execution is a key innovation.
 

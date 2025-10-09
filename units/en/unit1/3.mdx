@@ -4,17 +4,14 @@ LeRobotDataset is a standardized dataset format designed to address the specific
 
 The format provides unified, convenient access to robotics data across modalities, including sensorimotor readings, multiple camera feeds, and teleoperation status. LeRobotDataset also stores general information about the data being collected, including textual task descriptions, the type of robot used, and measurement specifics such as frames per second for both image and robot state streams, together with the types of cameras used, their resolution, and frame-rate.
 
-<Tip>
-
-**Why a specialized format?** Traditional ML datasets (like ImageNet) are simple: one image, one label. Robotics data is much more complex:
-- **Multi-modal**: Images + sensor readings + actions, all synchronized
-- **Temporal**: Both observations and actions are recorded over time, and very much in a sequential manner
-- **Episodic**: Data is organized in trajectories/episodes
-- **High-dimensional**: Multiple camera views (i.e., multiple images), joint states, forces, etc.
-
-LeRobotDataset handles all this complexity seamlessly!
-
-</Tip>
+> [!TIP]
+> **Why a specialized format?** Traditional ML datasets (like ImageNet) are simple: one image, one label. Robotics data is much more complex:
+> - **Multi-modal**: Images + sensor readings + actions, all synchronized
+> - **Temporal**: Both observations and actions are recorded over time, and very much in a sequential manner
+> - **Episodic**: Data is organized in trajectories/episodes
+> - **High-dimensional**: Multiple camera views (i.e., multiple images), joint states, forces, etc.
+>
+> LeRobotDataset handles all this complexity seamlessly!
 
 LeRobotDataset provides a unified interface for handling multi‑modal, time‑series data and integrates seamlessly with the PyTorch and Hugging Face ecosystems.
 
@@ -55,10 +52,7 @@ An example structure for a given LeRobotDataset would appear as follows:
 
 Reading guide: start with `meta/info.json` to understand the schema and fps; then inspect `meta/stats.json` for normalization; finally, peek at one file in `data/` and `videos/` to connect the dots.
 
-<Tip>
-
-**Storage Efficiency:** By concatenating episodes into larger files, LeRobotDataset avoids the "small files problem" that can slow down filesystems. A dataset with 1M episodes might have only hundreds of actual files on disk!
-
-**Pro Tip:** The metadata files act like a database index, allowing fast access to specific episodes without loading entire video files.
-
-</Tip>
+> [!TIP]
+> **Storage Efficiency:** By concatenating episodes into larger files, LeRobotDataset avoids the "small files problem" that can slow down filesystems. A dataset with 1M episodes might have only hundreds of actual files on disk!
+>
+> **Pro Tip:** The metadata files act like a database index, allowing fast access to specific episodes without loading entire video files.

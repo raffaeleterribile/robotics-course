@@ -10,15 +10,12 @@ LeRobotDataset makes this easy with "temporal windowing." You simply declare whi
 
 ![streaming-multiple-frames](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/lerobotdataset-v3/streaming-multiple-frames.png)
 
-<Tip>
-
-**Temporal Windows Explained:** 
-- **Observation history**: `[-0.2, -0.1, 0.0]` gives you 200ms, 100ms, and current observations
-- **Action sequences**: `[0.0, 0.1, 0.2]` provides current and next 2 actions (100ms apart)
-- **Automatic padding**: Missing frames at episode boundaries are handled automatically. The datasets always returns the requested number of frames, and it applies padding where necessary.
-- **Mask included**: Know which frames are real vs. padded for proper training
-
-</Tip>
+> [!TIP]
+> **Temporal Windows Explained:** 
+> - **Observation history**: `[-0.2, -0.1, 0.0]` gives you 200ms, 100ms, and current observations
+> - **Action sequences**: `[0.0, 0.1, 0.2]` provides current and next 2 actions (100ms apart)
+> - **Automatic padding**: Missing frames at episode boundaries are handled automatically. The datasets always returns the requested number of frames, and it applies padding where necessary.
+> - **Mask included**: Know which frames are real vs. padded for proper training
 
 Conveniently, by using LeRobotDataset with a PyTorch `DataLoader` one can automatically collate the individual sample dictionaries from the dataset into a single dictionary of batched tensors for downstream training or inference. LeRobotDataset also natively supports streaming mode for datasets. Users can stream data of a large dataset hosted on the Hugging Face Hub, with a one-line change in their implementation. Streaming datasets supports high-performance batch processing (ca. 80-100 it/s, varying on connectivity) and high levels of frames randomization, key features for practical BC algorithms which otherwise may be slow or operating on highly non-i.i.d. data. This feature is designed to improve on accessibility so that large datasets can be processed by users without requiring large amounts of memory and storage.
 
@@ -91,15 +88,14 @@ sample = dataset[100]
 
 ### Streaming Large Datasets
 
-<Tip>
-
-**When to use streaming:**
-- **Dataset > available storage** - Stream datasets that don't fit on your disk
-- **Experimentation** - Quickly try different datasets without downloading
-- **Cloud training** - Reduce startup time by streaming from Hugging Face Hub
-- **Network available** - Requires stable internet connection during training
-
-**Performance:** Streaming achieves 80-100 it/s with good connectivity! That is (on average) comparable with locally-stored datasets, factoring out initialization overhead.
+> [!TIP]
+> **When to use streaming:**
+> - **Dataset > available storage** - Stream datasets that don't fit on your disk
+> - **Experimentation** - Quickly try different datasets without downloading
+> - **Cloud training** - Reduce startup time by streaming from Hugging Face Hub
+> - **Network available** - Requires stable internet connection during training
+>
+> **Performance:** Streaming achieves 80-100 it/s with good connectivity! That is (on average) comparable with locally-stored datasets, factoring out initialization overhead.
 
 <hfoptions id="dataset-loading">
 <hfoption id="download">
