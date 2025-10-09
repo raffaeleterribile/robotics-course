@@ -2,11 +2,11 @@
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png" alt="LeRobot Library Overview" style="width: 100%;" />
 
-Now that we've learnt some history, let's explore the main python library that we will be using throughout the course, LeRobot.
+Now that we've learned some history, let's explore the main Python library we'll be using throughout this course: LeRobot.
 
-*LeRobot is the open-source library for end-to-end robotics developed by Hugging Face. The library is vertically integrated on the entire robotics stack, supporting low-level control of real-world robot devices, advanced data and inference optimizations, as well as SOTA robot learning methods with simple implementations in pure PyTorch.*
+LeRobot is an open-source library for robotics developed by Hugging Face. Think of it as a complete toolkit that handles everything from controlling real robots to training advanced learning algorithms, all in one place using PyTorch.
 
-By "vertically integrated", we mean that LeRobot provides a unified interface for handling real-world robots, multi-modal, time-series data, and it is designed to play nicely with the PyTorch and Hugging Face ecosystems. In short, LeRobot is intended to be used as a single library for all your robotics needs.
+What makes LeRobot special is that it's "vertically integrated." This means it provides a unified way to work with real robots, handle complex multi-modal data (like combining camera feeds with sensor readings), and integrates smoothly with the PyTorch and Hugging Face tools you might already know. Essentially, LeRobot aims to be your one-stop library for robot learning projects.
 
 <Tip>
 
@@ -14,9 +14,9 @@ By "vertically integrated", we mean that LeRobot provides a unified interface fo
 
 </Tip>
 
-LeRobot also implements a unified, low-level approach to reading/writing robot configurations to extend support for other robot platforms with relatively low effort. The library introduces `LeRobotDataset`, a native robotics dataset format currently being used by the open-source community to efficiently record and share datasets.
+One key advantage is that LeRobot uses a standardized approach for connecting to different robot platforms. This means adding support for new robots requires much less work than starting from scratch. The library also introduces `LeRobotDataset`, a specialized format for robotics data that the open-source community is already using to share datasets efficiently.
 
-LeRobot also supports many state-of-the-art (SOTA) algorithms in robot learning, with efficient implementations in PyTorch, and extended support to experimentation and experiments tracking. Lastly, LeRobot defines a custom, optimized inference stack for robotic policies decoupling action planning from action execution, proving effective in guaranteeing more adaptability at runtime.
+LeRobot includes implementations of many cutting-edge robot learning algorithms, all built with PyTorch for efficiency. It also provides tools for running experiments and tracking results. Perhaps most importantly for real-world applications, LeRobot separates the "thinking" part (planning what to do) from the "doing" part (executing actions). This separation is crucial because it allows robots to react quickly and adapt better when things don't go exactly as planned.
 
 <Tip warning={true}>
 

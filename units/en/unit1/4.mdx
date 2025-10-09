@@ -1,12 +1,12 @@
 # Code Example: Datasets, in practice
 
-This section shows how to access datasets hosted on Hugging Face using the LeRobotDataset class. We'll start small and build up, so you can copy–paste the pattern that fits your use case. 
+This section shows you how to work with robotics datasets from Hugging Face using the LeRobotDataset class. We'll start with simple examples and gradually add complexity, so you can copy and adapt the approach that best fits your project.
 
-First, any dataset on the Hub that follows the three pillars (tabular, visual, relational metadata) can be accessed with a single instruction.
+The key thing to understand is that any dataset on the Hub that follows LeRobot's format (with tabular data, visual data, and metadata included) can be loaded with just one line of code.
 
-One does typically retrieve multiple items from a dataset, in _windows_ around a given index. Why windows? Most reinforcement learning (RL) and behavioral cloning (BC) algorithms operate on stacks of observations and actions. For brevity, we refer to joint states and camera frames collectively as a single “frame.” For example, RL often uses a history of observations $o_{t-H_o:t}$ to mitigate partial observability, and BC typically regresses chunks of multiple actions ($a_{t:t+H_a}$) rather than single controls.
+When working with robotics data, you often need to look at multiple time steps at once rather than single data points. Why? Most robot learning algorithms need to see how things change over time. For example, to pick up an object, a robot might need to see what happened in the last few moments to understand the current situation better. Similarly, many algorithms work better when they can plan several actions ahead rather than just deciding what to do right now.
 
-To support these training patterns, LeRobotDataset provides native temporal windowing. You define the time offsets (before/after) around any frame using `delta_timestamps`. Unavailable frames are padded and a mask is returned to filter padded elements. This all happens inside LeRobotDataset and is transparent to higher‑level wrappers like `torch.utils.data.DataLoader`.
+LeRobotDataset makes this easy with "temporal windowing." You simply declare which time offsets you want (i.e. current frame plus the two previous ones), and it automatically handles the complexity of getting those frames, even when some might be missing at the beginning or end of an episode.
 
 ![streaming-multiple-frames](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/lerobotdataset-v3/streaming-multiple-frames.png)
 

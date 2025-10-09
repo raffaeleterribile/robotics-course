@@ -2,22 +2,22 @@
 
 Robot learning starts with a simple idea: teach robots to improve from data and experience instead of hand‑coding every behavior. In practice, that means using examples (videos, sensor data, demonstrations) and feedback to help a robot get better at tasks like picking, placing, pushing, or walking.
 
-Why now? Two trends make this possible: modern machine learning is increasingly good at finding intricate patterns, and robotics datasets are becoming easier to collect and share. Together, they let us move from classical “write the physics and the controller” approaches to learning‑based methods that adapt from data.
+Why now? Two trends make this possible: modern machine learning is increasingly good at finding intricate patterns, and robotics datasets are becoming easier to collect and share. Together, they let us move from classical "write the physics and the controller" approaches to learning‑based methods that adapt from data.
 
 For example, a robot arm can learn to grasp a block by trying actions and getting rewards for progress (reinforcement learning), or even by watching and imitating human demonstrations (imitation learning). Over time, the same ideas scale to many tasks and even different robot bodies.
 
 <Tip>
 
 By the end of this unit, you will:
-- Understand in plain terms what “robot learning” means and why it’s useful
+- Understand in plain terms what "robot learning" means and why it's useful
 - See concrete examples of learning from demonstrations and from trial‑and‑error
-- Know what we’ll build toward in the next units and how LeRobot fits in
+- Know what we'll build toward in the next units and how LeRobot fits in
 
 </Tip>
 
 # Some History
 
-Autonomous robotics holds the premise of relieving humans from repetitive, tiring or dangerous manual tasks. Consequently, the field of robotics has been widely studied since its first inception in the 1950s. Lately, advancements in Machine Learning (ML) have sparked the development of a relatively new class of methods used to tackle robotics problems, leveraging large amounts of data and computation rather than human expertise and modeling skills to develop autonomous systems.
+Robotics is about helping humans with repetitive, tiring or dangerous tasks. People have been working on this challenge since the 1950s. Recently, advances in machine learning have opened up new ways to build robots. Instead of requiring human experts to write detailed instructions and models for every task, we can now use large amounts of data and computation to help robots learn behaviors on their own.
 
 <Tip>
 
@@ -29,12 +29,13 @@ The 1950s saw the birth of both artificial intelligence and robotics as distinct
 
 # The Future of Robotics
 
-The frontier of robotics research is indeed increasingly moving away from classical model-based control paradigm, embracing the advancements made in ML, aiming to unlock:
+Today's robotics researchers are moving away from the traditional approach of writing detailed models and control systems. Instead, they're embracing machine learning to create robots that can:
 
-1. Monolithic perception-to-action control pipelines
-2. Multi-modal data-driven feature extraction strategies*
-3. Reduced reliance on precise models of the world
-4. A better positioning to benefit from the growing availability of open robotics data
+- Learn direct connections from what they see to what they do, without needing separate systems for perception and control.
+- Extract useful information from many types of sensors (cameras, touch sensors, microphones) using data-driven methods.
+- Work effectively without needing perfect models of how the world behaves.
+- Take advantage of the growing number of open robotics datasets that anyone can access and learn from.
+- Work effectively without needing perfect models of how the world behaves.
 
 You can watch [this video](https://www.youtube.com/watch?v=VEs1QYEgOQo) to get a better sense of the paradigm shift currently undergoing in robotics.
 
@@ -44,6 +45,6 @@ You can watch [this video](https://www.youtube.com/watch?v=VEs1QYEgOQo) to get a
 
 </Tip>
 
-Moreover, since end-to-end learning on ever-growing collections of text and image data has historically been at the core of the development of *foundation models* (large-scale AI systems like GPT and CLIP that can understand and reason across multiple types of data), deriving robotics methods grounded in learning appears particularly consequential, especially as the number of openly available robotics datasets continues to grow, and robots are used in scenarios sensed with an increasingly large and diverse set of measurement devices (cameras, spectral cameras, LIDAR, microphones, etc).
+This trend is especially important because it mirrors how foundation models like GPT and CLIP were developed. These machine learning, or Artificial Intelligence, systems learned to understand and work with text and images by training on massive datasets. As robotics datasets grow larger and robots get equipped with more diverse sensors (regular cameras, infrared cameras, LIDAR, microphones), applying similar learning approaches to robotics becomes increasingly powerful.
 
-Robotics is, at its core, an inherently multidisciplinary field, requiring a wide range of expertise in both *software* and *hardware*. The integration of learning-based techniques further broadens this spectrum of skills, raising the bar for both research and practical applications.
+Robotics naturally requires expertise in both software and hardware. Adding machine learning to the mix means robotics practitioners need an even broader set of skills, which raises the bar for both research and real-world applications.
