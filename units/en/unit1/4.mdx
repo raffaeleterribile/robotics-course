@@ -1,24 +1,22 @@
-# Code Example: Batching a (Streaming) Dataset
+# Code Example: Datasets, in practice
 
 This section shows how to access datasets hosted on Hugging Face using the LeRobotDataset class. We'll start small and build up, so you can copy–paste the pattern that fits your use case. 
 
 First, any dataset on the Hub that follows the three pillars (tabular, visual, relational metadata) can be accessed with a single instruction.
 
-Why windows? Most reinforcement learning (RL) and behavioral cloning (BC) algorithms operate on stacks of observations and actions. For brevity, we refer to joint states and camera frames collectively as a single “frame.” For example, RL often uses a history of observations $o_{t-H_o:t}$ to mitigate partial observability, and BC typically regresses chunks of multiple actions ($a_{t:t+H_a}$) rather than single controls.
+One does typically retrieve multiple items from a dataset, in _windows_ around a given index. Why windows? Most reinforcement learning (RL) and behavioral cloning (BC) algorithms operate on stacks of observations and actions. For brevity, we refer to joint states and camera frames collectively as a single “frame.” For example, RL often uses a history of observations $o_{t-H_o:t}$ to mitigate partial observability, and BC typically regresses chunks of multiple actions ($a_{t:t+H_a}$) rather than single controls.
 
 To support these training patterns, LeRobotDataset provides native temporal windowing. You define the time offsets (before/after) around any frame using `delta_timestamps`. Unavailable frames are padded and a mask is returned to filter padded elements. This all happens inside LeRobotDataset and is transparent to higher‑level wrappers like `torch.utils.data.DataLoader`.
 
-<!-- TODO: Diagram: A timeline with observation frames to the left and predicted action chunk to the right; highlight delta_timestamps. -->
+![streaming-multiple-frames](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/lerobotdataset-v3/streaming-multiple-frames.png)
 
 <Tip>
 
 **Temporal Windows Explained:** 
 - **Observation history**: `[-0.2, -0.1, 0.0]` gives you 200ms, 100ms, and current observations
 - **Action sequences**: `[0.0, 0.1, 0.2]` provides current and next 2 actions (100ms apart)
-- **Automatic padding**: Missing frames at episode boundaries are handled automatically
+- **Automatic padding**: Missing frames at episode boundaries are handled automatically. The datasets always returns the requested number of frames, and it applies padding where necessary.
 - **Mask included**: Know which frames are real vs. padded for proper training
-
-This is crucial for robot learning where decisions depend on recent history!
 
 </Tip>
 
@@ -101,9 +99,7 @@ sample = dataset[100]
 - **Cloud training** - Reduce startup time by streaming from Hugging Face Hub
 - **Network available** - Requires stable internet connection during training
 
-**Performance:** Streaming achieves 80-100 it/s with good connectivity!
-
-</Tip>
+**Performance:** Streaming achieves 80-100 it/s with good connectivity! That is (on average) comparable with locally-stored datasets, factoring out initialization overhead.
 
 <hfoptions id="dataset-loading">
 <hfoption id="download">
@@ -143,12 +139,13 @@ sample = streaming_dataset[100]
 
 ## Training Integration
 
+You can easily integrate regular and streaming datasets with torch data loaders. This makes integrating any LeRobotDataset with your own (`torch`) training loop rather convenient. Because we fetch all frames from the datasets as a tensor, wrapping iterating over a dataset with training is particularly straightforward.  
+
 ### PyTorch DataLoader
 
 ```python
 import torch
 from torch.utils.data import DataLoader
-
 # Create DataLoader for training
 dataloader = DataLoader(
     dataset,
@@ -171,7 +168,6 @@ for batch in dataloader:
     # loss.backward()
     # optimizer.step()
 ```
-
 ## Why This Matters
 
 This simple API hides significant complexity:

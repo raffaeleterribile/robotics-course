@@ -1,10 +1,10 @@
 # Introduction to Robot Learning
 
-Robot learning is a simple idea: teach robots to improve from data and experience instead of hand‑coding every behavior. In practice, that means using examples (videos, sensor data, demonstrations) and feedback to help a robot get better at tasks like picking, placing, pushing, or walking.
+Robot learning starts with a simple idea: teach robots to improve from data and experience instead of hand‑coding every behavior. In practice, that means using examples (videos, sensor data, demonstrations) and feedback to help a robot get better at tasks like picking, placing, pushing, or walking.
 
-Why now? Two trends make this possible: modern machine learning is very good at finding patterns, and robotics datasets are becoming easier to collect and share. Together, they let us move from classical “write the physics and the controller” approaches to learning‑based methods that adapt from data.
+Why now? Two trends make this possible: modern machine learning is increasingly good at finding intricate patterns, and robotics datasets are becoming easier to collect and share. Together, they let us move from classical “write the physics and the controller” approaches to learning‑based methods that adapt from data.
 
-For example, a robot arm can learn to grasp a block after watching and imitating human demonstrations (imitation learning), or it can learn by trying actions and getting rewards for progress (reinforcement learning). Over time, the same ideas scale to many tasks and even different robot bodies.
+For example, a robot arm can learn to grasp a block by trying actions and getting rewards for progress (reinforcement learning), or even by watching and imitating human demonstrations (imitation learning). Over time, the same ideas scale to many tasks and even different robot bodies.
 
 <Tip>
 
@@ -23,7 +23,7 @@ Autonomous robotics holds the premise of relieving humans from repetitive, tirin
 
 Some context...
 
-The 1950s saw the birth of both artificial intelligence and robotics as distinct fields. It's taken nearly 70 years for these fields to converge in meaningful ways through robot learning!
+The 1950s saw the birth of both artificial intelligence and robotics as distinct fields. The first robot ever was [Unimate](https://en.wikipedia.org/wiki/Unimate), invented in 1961. It's taken nearly 70 years for these fields to converge in meaningful ways through robot learning!
 
 </Tip>
 
@@ -36,14 +36,14 @@ The frontier of robotics research is indeed increasingly moving away from classi
 3. Reduced reliance on precise models of the world
 4. A better positioning to benefit from the growing availability of open robotics data
 
+You can watch [this video](https://www.youtube.com/watch?v=VEs1QYEgOQo) to get a better sense of the paradigm shift currently undergoing in robotics.
+
 <Tip warning={true}>
 
 **Key Insight:** This shift represents a fundamental change in how we think about robotics - from engineering precise solutions to learning adaptive behaviors from data.
 
 </Tip>
 
-While central problems in manipulation (using robotic arms to interact with objects), locomotion (moving through environments), and whole-body control (coordinating complex robotic systems) have traditionally demanded deep knowledge of rigid-body dynamics, contact modeling, and planning under uncertainty, recent results seem to indicate learning can prove just as effective as explicit modeling, sparking interest in the field of *robot learning*. This interest can be largely justified considering the significant challenges related to deriving accurate mathematical models of how robots interact with complex, unpredictable environments.
-
-Moreover, since end-to-end learning on ever-growing collections of text and image data has historically been at the core of the development of *foundation models* (large-scale AI systems like GPT and CLIP that can understand and reason across multiple types of data), deriving robotics methods grounded in learning appears particularly consequential, especially as the number of openly available robotics datasets continues to grow.
+Moreover, since end-to-end learning on ever-growing collections of text and image data has historically been at the core of the development of *foundation models* (large-scale AI systems like GPT and CLIP that can understand and reason across multiple types of data), deriving robotics methods grounded in learning appears particularly consequential, especially as the number of openly available robotics datasets continues to grow, and robots are used in scenarios sensed with an increasingly large and diverse set of measurement devices (cameras, spectral cameras, LIDAR, microphones, etc).
 
 Robotics is, at its core, an inherently multidisciplinary field, requiring a wide range of expertise in both *software* and *hardware*. The integration of learning-based techniques further broadens this spectrum of skills, raising the bar for both research and practical applications.

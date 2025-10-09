@@ -53,9 +53,7 @@ An example structure for a given LeRobotDataset would appear as follows:
 - `data/*`: Contains the core frame-by-frame tabular data, using parquet files to allow for fast, memory-mapped access. To improve performance and handle large datasets, data from multiple episodes are concatenated into larger files. These files are organized into chunked subdirectories to keep the size of directories manageable. A single file typically contains data for more than one single episode.
 - `videos/*`: Contains the MP4 video files for all visual observation streams. Similar to the `data/` directory, the video footage from multiple episodes is concatenated into single MP4 files. This strategy significantly reduces the number of files in the dataset, which is more efficient for modern filesystems.
 
-Reading guide: start with `meta/info.json` to understand the schema and fps; then inspect `meta/stats.json` for normalization; finally, peek at one file in `data/` and `videos/` to connect the dots.
-
-<!-- TODO: Schematic: arrows from meta/info.json and meta/episodes/* pointing to slices inside data/*.parquet and videos/*.mp4. -->
+Reading guide: start with `meta/info.json` to understand the schema; then inspect `meta/stats.json` for normalization; finally, peek at one file in `data/` and `videos/` to connect the dots. You can also do this for all datasets available on the Hugging Face Hub, to get a sense of the peculiarities of a dataset without even having to download it.
 
 <Tip>
 

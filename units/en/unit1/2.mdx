@@ -1,4 +1,4 @@
-# LeRobot: An Open-Source Library
+# LeRobot: An End-to-End Robot Learning Library
 
 <img src="https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png" alt="LeRobot Library Overview" style="width: 100%;" />
 
@@ -6,7 +6,7 @@ Now that we've learnt some history, let's explore the main python library that w
 
 *LeRobot is the open-source library for end-to-end robotics developed by Hugging Face. The library is vertically integrated on the entire robotics stack, supporting low-level control of real-world robot devices, advanced data and inference optimizations, as well as SOTA robot learning methods with simple implementations in pure PyTorch.*
 
-By vertically integrating, we mean that LeRobot provides a unified interface for handling multi-modal, time-series data, and it is designed to play nicely with the PyTorch and Hugging Face ecosystems. In short, LeRobot is intended to be used as a single library for all your robotics needs. Much like how `transformers` is used for all your ML needs.
+By "vertically integrated", we mean that LeRobot provides a unified interface for handling real-world robots, multi-modal, time-series data, and it is designed to play nicely with the PyTorch and Hugging Face ecosystems. In short, LeRobot is intended to be used as a single library for all your robotics needs.
 
 <Tip>
 
@@ -14,9 +14,9 @@ By vertically integrating, we mean that LeRobot provides a unified interface for
 
 </Tip>
 
-LeRobot also implements a unified, low-level approach to reading/writing robot configurations to extend support for other robot platforms with relatively low effort. The library introduces LeRobotDataset, a native robotics dataset format currently being used by the community to efficiently record and share datasets.
+LeRobot also implements a unified, low-level approach to reading/writing robot configurations to extend support for other robot platforms with relatively low effort. The library introduces `LeRobotDataset`, a native robotics dataset format currently being used by the open-source community to efficiently record and share datasets.
 
-LeRobot also supports many state-of-the-art (SOTA) algorithms in robot learning—mainly based on Reinforcement Learning (RL) and Behavioral Cloning (BC) techniques—with efficient implementations in PyTorch, and extended support to experimentation and experiments tracking. Lastly, LeRobot defines a custom, optimized inference stack for robotic policies decoupling action planning from action execution, proving effective in guaranteeing more adaptability at runtime.
+LeRobot also supports many state-of-the-art (SOTA) algorithms in robot learning, with efficient implementations in PyTorch, and extended support to experimentation and experiments tracking. Lastly, LeRobot defines a custom, optimized inference stack for robotic policies decoupling action planning from action execution, proving effective in guaranteeing more adaptability at runtime.
 
 <Tip warning={true}>
 
@@ -24,8 +24,3 @@ LeRobot also supports many state-of-the-art (SOTA) algorithms in robot learning�
 
 </Tip>
 
-## Tutorial Structure
-
-This tutorial serves the double purpose of providing useful references for the Science behind—and practical use of—common robot learning techniques. To this aim, we strike to provide a rigorous yet concise overview of the core concepts behind the techniques presented, paired with practical examples of how to use such techniques concretely, with code examples in LeRobot, for researchers and practitioners interested in the field of robot learning.
-
-Our goal with this tutorial is to provide an intuitive explanation of the reasons various disparate ideas from Machine Learning (ML) have converged and are powering the current evolution of Robotics, driving the unprecedented progress we see today. We complement our presentation of the most common and recent approaches in robot learning with practical code implementations using LeRobot, and start here by presenting the dataset format introduced with LeRobot.
