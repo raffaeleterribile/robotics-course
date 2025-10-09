@@ -1,6 +1,6 @@
 # Understanding Robot Kinematics
 
-In this section, we’ll build intuition for kinematics. Which is the math that links joint angles to end‑effector positions i.e. where is the hand given the joints? We will do this by walking through a concrete example.
+In this section, we’ll build intuition for kinematics. You can think of kinematics as the math that links joint angles to end‑effector positions i.e. where is the hand given the joints? We will do this by walking through a concrete example.
 
 Let's explore how traditional robotics approaches robot control through a concrete example.
 
@@ -42,17 +42,17 @@ This is called **Forward Kinematics (FK)** - mapping from joint space to task sp
 - Second link: starts from first link's end, rotated by $\theta_1 + \theta_2$
 - Final position: sum of both link contributions
 
-**Why it matters:** FK is relatively easy - given joint angles, we can always compute where the robot's hand is. The hard part is the reverse...
+**Why it matters:** For a simple robot, FK is relatively easy - given joint angles, we can always compute where the robot's hand is. More complex robots - for instance, dexterous hands, are more challenging to model. 
 
 </Tip>
 
 ## Inverse Kinematics: From Position to Joints
 
-Now let’s try to invert the mapping: given a desired hand position, what joints achieve it?
+Now let’s try to invert the mapping: given a desired hand position, what joint configuration achieves it?
 
 **Question:** Given a desired end-effector position p*, what joint angles should we use?
 
-**Answer:** This is **Inverse Kinematics (IK)** - much harder to solve!
+**Answer:** This is **Inverse Kinematics (IK)** - typically more intricate to solve, as it deals with the Jacobian matrix of the forward kinematics function!
 
 We need to solve: $p(q) = p^*$
 
@@ -65,8 +65,8 @@ $$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
 
 **Why IK is Hard:**
 - **Multiple solutions** - Same end position can be reached with different joint angles
-- **No solution** - Some positions are unreachable (outside workspace)
-- **Nonlinear equations** - Trigonometric functions make analytical solutions difficult
+
+- **Nonlinear equations** - Some functions make analytical solutions difficult
 - **Constraints** - Joint limits and obstacles further complicate the problem
 
 This is why robotics engineers spend so much time on IK algorithms!
@@ -93,8 +93,6 @@ Real robots face **constraints**:
 - **Joint limits** - Finite range of motion
 
 These constraints make the feasible configuration space $\mathcal{Q}$ much more complex!
-
-<!-- TODO: Annotated picture: highlight forbidden regions/configurations induced by floor and shelf; show how certain θ ranges are disallowed. -->
 
 ## Key Insight
 

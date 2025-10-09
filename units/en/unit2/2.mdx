@@ -8,7 +8,7 @@ In this short section, we’ll organize the space of robot behaviors so you can 
 
 In the vast majority of instances, robotics deals with producing motion via actuating joints connecting nearly entirely-rigid links. A key distinction between focus areas in robotics is based on whether the generated motion modifies (1) the absolute state of the environment (via dexterity), (2) the relative state of the robot with respect to its environment (exercising mobility skills), or (3) a combination of the two.
 
-At a high level, most problems fall into three categories:
+At a high level, most problems fall into one of three categories:
 
 Effects such as (1) are typically achieved *through* the robot, i.e. generating motion to perform an action inducing a desirable modification, effectively *manipulating* the environment (**manipulation**).
 
@@ -34,6 +34,8 @@ The traditional body of work developed since the very inception of robotics is i
 
 While explicit models have proven fundamental in achieving important milestones towards the development of modern robotics, recent works leveraging implicit models proved particularly promising in surpassing scalability and applicability challenges via learning.
 
-<!-- TODO: Simple flow sketch: classical stack vs end-to-end policy for a manipulation task. -->
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/classical-vs-robot-learning.png"  
+     alt="Classical vs Robot Learning"  
+     width="600" height="200">  
 
 We’ll reuse this taxonomy in later units when we discuss datasets (modalities to record) and policies (what action chunks to predict) for each category.

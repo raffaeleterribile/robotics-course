@@ -1,6 +1,6 @@
 # Control Systems and Their Limitations
 
-In this section, we step from kinematics to control. We first show how to reason with velocities (differential kinematics), then close the loop with feedback, and finally summarize where classical pipelines struggle in practice.
+In this section, we step from kinematics to control. We first show how to reason with velocities (differential inverse kinematics, diff-IK), then close the loop with feedback, and finally summarize where classical pipelines struggle in practice.
 
 ## Differential Kinematics: A Smarter Approach
 
@@ -36,6 +36,7 @@ Real environments are **dynamic and uncertain**. We need feedback to handle:
 - **Sensor noise** - Measurements have uncertainty
 
 ### Feedback Control Solution
+
 Combine desired motion with error correction:
 
 $$\dot{q} = J(q)^+ (\dot{p}^* + k_p \Delta p)$$
@@ -130,12 +131,9 @@ This is the promise of **robot learning**!
 
 <Tip>
 
-**The Best of Both Worlds:** Modern robot learning often combines classical insights with learning. For example:
-- Use physics knowledge to structure neural networks
-- Combine learning with safety constraints from control theory
-- Initialize learning with classical solutions
+**The Best of Both Worlds:** Modern robot learning often combines classical insights with learning. For example one can combine learning with safety constraints from control theory
 
-Pure learning vs pure classical is a false dichotomy - hybrid approaches often work best!
+Pure learning vs pure classical is a false dichotomy - hybrid approaches have had their successes
 
 </Tip>
 
@@ -144,7 +142,7 @@ Pure learning vs pure classical is a false dichotomy - hybrid approaches often w
 ## Key Takeaways
 
 - Classical robotics relies on explicit mathematical models and expert knowledge
-- Forward kinematics is straightforward, but inverse kinematics can be very challenging
+- Forward kinematics is straightforward, but is viable only in quite simple scenarios. Inverse kinematics is more general, but it can be challenging to develop in practice  
 - Differential kinematics works with velocities rather than positions for better control
 - Classical approaches struggle with integration, scalability, modeling accuracy, and data utilization
 - Learning-based methods offer solutions to these fundamental limitations
@@ -152,7 +150,8 @@ Pure learning vs pure classical is a false dichotomy - hybrid approaches often w
 
 <Tip>
 
-Up next, we’ll show how learning-based methods (reinforcement learning and imitation learning) absorb some of this complexity by optimizing directly from data, while still borrowing ideas from control when helpful.
+Up next, we’ll show how learning-based methods (reinforcement learning and imitation learning) absorb some of this complexity by optimizing directly from data.  
+
 
 </Tip>
 

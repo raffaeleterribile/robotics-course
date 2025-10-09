@@ -16,7 +16,9 @@ First, a quick recap of the important concepts covered across the foundational u
 
 **Motivation for Learning-Based Robotics:** You've explored the fundamental shift occurring in robotics today, moving from classical model-based approaches toward data-driven learning methods. We've established why robot learning is becoming essential for creating more capable and generalizable robotic systems, and how tools like LeRobot are making these advanced techniques accessible to a broader community of researchers and practitioners.
 
-**LeRobot Ecosystem:** You've gained hands-on experience with LeRobot's comprehensive approach to robotics. This includes understanding the vision behind LeRobot as an end-to-end robotics library, learning about the LeRobotDataset format that handles the complexity of multi-modal robotics data, and getting practical experience with loading and processing real robotics datasets for machine learning applications.
+**LeRobot Ecosystem:** You've gained a fundamental understanding of LeRobot's approach to robotics. This includes understanding the vision behind LeRobot as an end-to-end robotics library, aiming at integrating the different aspects of robotics altogether. You have also learned about the LeRobotDataset format, which handles the complexity of multi-modal robotics data, and got practical experience with loading and processing real robotics datasets for machine learning applications.
+
+Next, you will learn how to synthetize autonomous control behaviors directly from data, and deploy them on real-world robots using lerobot.
 
 **Classical Robotics Foundations:** We've examined the traditional approaches to robotics in detail, covering different types of robot motion including manipulation, locomotion, and mobile manipulation. You've learned about forward and inverse kinematics, differential kinematics, and feedback control systems. Most importantly, you've developed an understanding of why classical approaches, despite their mathematical rigor, struggle with the complexity and variability of real-world robotic applications.
 
@@ -38,11 +40,9 @@ They naturally handle multi-modal, high-dimensional inputs through neural networ
 
 The foundational knowledge you've gained prepares you for the advanced topics that follow. 
 
-<!-- TODO: Roadmap diagram -->
+**Reinforcement Learning for Robotics** will explore how robots can learn optimal behaviors through trial and error interactions with their environment. You'll learn about designing appropriate reward signals for robotics tasks, understand reinforcement learning methods that enable robots to improve their performance over time, and tackle the crucial challenge of sample efficiency—learning effectively with limited real-world interaction data. We'll also cover how LeRobot implements these reinforcement learning algorithms in practice.
 
-**Reinforcement Learning for Robotics** will explore how robots can learn optimal behaviors through trial and error interactions with their environment. You'll learn about designing appropriate reward signals for robotics tasks, understand policy gradient methods that enable robots to improve their performance over time, and tackle the crucial challenge of sample efficiency—learning effectively with limited real-world interaction data. We'll also cover how LeRobot implements these reinforcement learning algorithms in practice.
-
-**Imitation Learning and Behavioral Cloning** will demonstrate how robots can acquire complex skills by observing and copying expert demonstrations. This approach is particularly valuable because it allows robots to learn from human expertise without requiring explicit reward engineering. You'll understand how to handle the distribution shift problem that occurs when robots encounter situations not seen in training data, explore advanced imitation learning techniques beyond simple behavioral cloning, and gain practical experience implementing these methods using LeRobot's tools.
+**Imitation Learning via Behavioral Cloning** will demonstrate how robots can acquire complex skills by observing and copying expert demonstrations. This approach is particularly valuable because it allows robots to learn from real-world human expertise without requiring explicit reward engineering, sidestepping the criticalities associated with using RL in practice. You'll understand how to handle the distribution shift problem that occurs when robots encounter situations not seen in training data, explore advanced imitation learning techniques beyond simple behavioral cloning, and gain practical experience implementing these methods using LeRobot's tools.
 
 **Foundation Models for Robotics** will cover the cutting-edge developments that are creating more general and capable robotic systems. You'll explore how multi-task learning enables knowledge sharing across different robotic platforms and tasks, understand language-conditioned policies that allow robots to follow natural language instructions, and learn about scaling laws that govern how performance improves with larger models and datasets. This section will prepare you to understand and contribute to the development of truly generalist robotic systems.
 
@@ -82,9 +82,10 @@ Through this foundational section of the course, you've developed both technical
 As you continue your robot learning journey:
 
 **Keep Learning:**
-- Explore LeRobot documentation: [huggingface.co/docs/lerobot](https://huggingface.co/docs/lerobot)
-- Try LeRobot examples: [github.com/huggingface/lerobot](https://github.com/huggingface/lerobot)
-- Join the community discussions
+- [Explore LeRobot documentation](https://huggingface.co/docs/lerobot)
+- [Try LeRobot examples](https://github.com/huggingface/lerobot)
+- [Give a read to our in-detail tutorial](https://huggingface.co/spaces/lerobot/robot-learning-tutorial)
+- [Join the community discussions](https://huggingface.co/lerobot)
 
 **Get Involved:**
 - Contribute datasets to the community
