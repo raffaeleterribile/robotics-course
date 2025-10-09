@@ -2,15 +2,15 @@
 
 LeRobotDataset is a standardized dataset format designed to address the specific needs of robot learning research. In the next few minutes, you’ll see what problems it solves, how it is organized, and where to look first when loading data.
 
-It provides unified, convenient access to robotics data across modalities, including sensorimotor readings, multiple camera feeds, and teleoperation status. LeRobotDataset also stores general information about the data being collected, including textual task descriptions, the type of robot used, and measurement specifics such as frames per second for both image and robot state streams.
+The format provides unified, convenient access to robotics data across modalities, including sensorimotor readings, multiple camera feeds, and teleoperation status. LeRobotDataset also stores general information about the data being collected, including textual task descriptions, the type of robot used, and measurement specifics such as frames per second for both image and robot state streams, together with the types of cameras used, their resolution, and frame-rate.
 
 <Tip>
 
 **Why a specialized format?** Traditional ML datasets (like ImageNet) are simple: one image, one label. Robotics data is much more complex:
 - **Multi-modal**: Images + sensor readings + actions, all synchronized
-- **Temporal**: Actions depend on observation history
+- **Temporal**: Both observations and actions are recorded over time, and very much in a sequential manner
 - **Episodic**: Data is organized in trajectories/episodes
-- **High-dimensional**: Multiple camera views, joint states, forces, etc.
+- **High-dimensional**: Multiple camera views (i.e., multiple images), joint states, forces, etc.
 
 LeRobotDataset handles all this complexity seamlessly!
 
@@ -22,10 +22,11 @@ It is extensible and customizable, and already supports openly available data ac
 
 The format is built to be efficient for training and flexible enough to accommodate diverse data types, while promoting reproducibility and ease of use.
 
-<!-- TODO: Diagram: Three pillars (Tabular, Visual, Metadata) with arrows into a "Sample" returned by the API. -->
+![](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/item-from-dataset.png)
 
 ## The Dataset Class Design
 
+You can read more about the design choices behind the design of our dataset class [here](https://huggingface.co/blog/lerobot-datasets-v3).
 A core design choice behind LeRobotDataset is separating the underlying data storage from the user-facing API. This allows for efficient storage while presenting the data in an intuitive, ready-to-use format.
 
 Think of it as two layers: a compact on‑disk layout for speed and scale, and a clean Python interface that yields ready‑to‑train tensors.
@@ -33,16 +34,15 @@ Think of it as two layers: a compact on‑disk layout for speed and scale, and a
 Datasets are always organized into three main components:
 
 - **Tabular Data**: Low-dimensional, high-frequency data such as joint states, and actions are stored in efficient memory-mapped files, and typically offloaded to the more mature `datasets` library by Hugging Face, providing fast with limited memory consumption.
-- **Visual Data**: To handle large volumes of camera data, frames are concatenated and encoded into MP4 files. Frames from the same episode are always grouped together into the same video, and multiple videos are grouped together by camera. To reduce stress on the file system, groups of videos for the same camera view are also broke into multiple sub-directories, after a given threshold number.
+- **Visual Data**: To handle large volumes of camera data, frames are concatenated and encoded into MP4 files. Frames from the same episode are always grouped together into the same video, and multiple videos are grouped together by camera. To reduce stress on the file system, groups of videos for the same camera view are also broke into multiple sub-directories.
 - **Metadata**: A collection of JSON files which describes the dataset's structure in terms of its metadata, serving as the relational counterpart to both the tabular and visual dimensions of data. Metadata include the different feature schema, frame rates, normalization statistics, and episode boundaries.
 
 As you browse a dataset on disk, keep these three buckets in mind—they explain almost everything you’ll see.
 
-<!-- TODO: Diagram: Minimal tree view of meta/, data/, videos/ with 2–3 representative files each. -->
 
 For scalability, and to support datasets with potentially millions of trajectories (resulting in hundreds of millions or billions of individual camera frames), we merge data from different episodes into the same high-level structure.
 
-Concretely, a single parquet or MP4 often contains multiple episodes. This limits the number of files and speeds up I/O. The trade‑off is that metadata becomes the “map” that tells you where each episode begins and ends.
+Concretely, a single parquet or MP4 often contains multiple episodes. This limits the number of files and speeds up I/O. The trade‑off is that metadata becomes the “map” that tells you where each episode begins and ends. In turn, metadata have a much more "relational" function, similar to how way in a relational database, shared keys allow to retrieve information from multiple tables.
 
 An example structure for a given LeRobotDataset would appear as follows:
 
@@ -55,7 +55,6 @@ An example structure for a given LeRobotDataset would appear as follows:
 
 Reading guide: start with `meta/info.json` to understand the schema and fps; then inspect `meta/stats.json` for normalization; finally, peek at one file in `data/` and `videos/` to connect the dots.
 
-<!-- TODO: Schematic: arrows from meta/info.json and meta/episodes/* pointing to slices inside data/*.parquet and videos/*.mp4. -->
 
 <Tip>
 
