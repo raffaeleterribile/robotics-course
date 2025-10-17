@@ -1,0 +1,34 @@
+# LeRobot: An End-to-End Robot Learning Library
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png" alt="LeRobot Library Overview" style="width: 100%;" />
+
+Now that we've learned some history, let's explore the main Python library we'll be using throughout this course: LeRobot.
+
+LeRobot is an open-source library for robotics developed by Hugging Face. Think of it as a complete toolkit that handles everything from controlling real robots to training advanced learning algorithms, all in one place using PyTorch.
+
+What makes LeRobot special is that it's "vertically integrated." This means it provides a unified way to work with real robots, handle complex multi-modal data (like combining camera feeds with sensor readings), and integrates smoothly with the PyTorch and Hugging Face tools you might already know. Essentially, LeRobot aims to be your one-stop library for robot learning projects.
+
+> [!TIP]
+> **Supported Robots:** LeRobot currently supports accessible platforms such as **SO-100/SO-101** (3D‑printable arms) and **ALOHA/ALOHA‑2** (bimanual manipulation). For the up‑to‑date list of supported platforms, see the [official documentation](https://huggingface.co/docs/lerobot).
+
+One key advantage is that LeRobot uses a standardized approach for connecting to different robot platforms. This means adding support for new robots requires much less work than starting from scratch. The library also introduces `LeRobotDataset`, a specialized format for robotics data that the open-source community is already using to share datasets efficiently.
+
+LeRobot includes implementations of many cutting-edge robot learning algorithms, all built with PyTorch for efficiency. It also provides tools for running experiments and tracking results. Perhaps most importantly for real-world applications, LeRobot separates the "thinking" part (planning what to do) from the "doing" part (executing actions). This separation is crucial because it allows robots to react quickly and adapt better when things don't go exactly as planned.
+
+> [!WARNING]
+> **Performance Note:** LeRobot's optimized inference stack is crucial for real-time robot control, where delays of even milliseconds can affect performance. This separation of planning and execution is a key innovation.
+
+## References
+
+For a full list of references, check out the [tutorial](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **RT-1: Robotics Transformer for Real-World Control at Scale** (2023)  
+  Anthony Brohan et al.  
+  This paper demonstrates how transformer architectures can be applied to robotic control at scale, showing the power of learning from large and diverse datasets.  
+  [arXiv:2212.06817](https://huggingface.co/papers/2212.06817)
+
+- **Open X-Embodiment: Robotic Learning Datasets and RT-X Models** (2023)  
+  Open X-Embodiment Collaboration  
+  A collaborative effort to create large-scale, diverse robotic datasets across multiple embodiments, demonstrating the importance of data sharing in advancing robot learning.  
+  [arXiv:2310.08864](https://huggingface.co/papers/2310.08864)
+

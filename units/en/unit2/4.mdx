@@ -1,0 +1,159 @@
+# Control Systems and Their Limitations
+
+In this section, we step from kinematics to control. We first show how to reason with velocities (differential inverse kinematics, diff-IK), then close the loop with feedback, and finally summarize where classical pipelines struggle in practice.
+
+## Differential Kinematics: A Smarter Approach
+
+Instead of solving for joint positions directly, we can work with **velocities**:
+
+### The Key Insight
+If we know the relationship between joint velocities and end-effector velocities, we can control motion more smoothly:
+
+$$\dot{p} = J(q) \dot{q}$$
+
+Where $J(q)$ is the **Jacobian matrix** - the relationship between joint and task space velocities.
+
+<!-- TODO: Micro-diagram: small vector at q in configuration space mapped by J(q) to a small vector at p in task space. -->
+
+### Differential IK Solution
+Given a desired end-effector velocity $\dot{p}^*$, find joint velocities:
+
+$$\dot{q} = J(q)^+ \dot{p}^*$$
+
+Where $J(q)^+$ is the **pseudo-inverse** of the Jacobian.
+
+## Adding Feedback Control
+
+Open-loop tracking is brittle under modeling errors and disturbances. We close the loop by feeding back the tracking error.
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
+
+*Dealing with moving obstacles requires feedback control.*
+
+Real environments are **dynamic and uncertain**. We need feedback to handle:
+- **Modeling errors** - Our equations aren't perfect
+- **Disturbances** - Unexpected forces or obstacles  
+- **Sensor noise** - Measurements have uncertainty
+
+### Feedback Control Solution
+
+Combine desired motion with error correction:
+
+$$\dot{q} = J(q)^+ (\dot{p}^* + k_p \Delta p)$$
+
+Where $\Delta p = p^* - p(q)$ is the position error.
+
+
+> [!TIP]
+> Start with small $k_p$ and increase gradually while monitoring oscillations. Use a watchdog (safety stop) and saturate commands to keep the system within safe limits.
+
+## Why Classical Approaches Struggle
+
+With differential reasoning and feedback, many tracking tasks are solvable—on paper. In practice, the system still breaks under real-world complexity for the reasons below.
+
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
+
+*Four key limitations of dynamics-based robotics approaches.*
+
+
+### 1. **Integration Challenges**
+Classical pipelines are built from **separate modules**:
+- Sensing → State Estimation → Planning → Control → Actuation
+
+**Problems:**
+- Errors compound through the pipeline
+- Brittle when any component fails
+- Hard to adapt to new tasks or robots
+
+### 2. **Limited Scalability**  
+Traditional methods struggle with:
+- **High-dimensional sensor data** (cameras, LIDAR)
+- **Multi-task scenarios** (each task needs custom planning)
+- **Multi-modal integration** (vision + touch + proprioception)
+
+### 3. **Modeling Limitations**
+Real-world physics is complex:
+- **Contact dynamics** - Hard to model precisely
+- **Deformable objects** - Beyond rigid-body assumptions
+- **Friction and compliance** - Difficult to characterize
+
+### 4. **Ignoring Data Trends**
+Classical methods don't leverage:
+- **Growing robotics datasets** - Millions of demonstrations available
+- **Cross-robot learning** - Insights from other platforms
+- **Community knowledge** - Decentralized data collection
+
+## The Learning Alternative
+
+To address these limitations, we contrast a classical modular pipeline with an end-to-end learning policy.
+
+<hfoptions id="robotics-approaches">
+<hfoption id="classical">
+
+**Classical Robotics Approach:**
+
+```
+Perception → State Estimation → Planning → Control → Actuation
+```
+
+**Challenges:**
+- Each module needs expert tuning
+- Errors compound through pipeline  
+- Hard to adapt to new tasks/robots
+- Requires precise world models
+
+</hfoption>
+<hfoption id="learning">
+
+**Learning-Based Approach:**
+
+```
+Raw Sensors → Neural Network → Actions
+```
+
+**Benefits:**
+- Learn from data - Use demonstrations and experience
+- End-to-end training - Optimize the entire pipeline together  
+- Generalize across tasks - Share knowledge between different objectives
+- Adapt to new robots - Transfer insights across platforms
+
+</hfoption>
+</hfoptions>
+
+This is the promise of **robot learning**!
+
+
+> [!TIP]
+> **The Best of Both Worlds:** Modern robot learning often combines classical insights with learning. For example one can combine learning with safety constraints from control theory
+>
+> Pure learning vs pure classical is a false dichotomy - hybrid approaches have had their successes
+
+---
+
+## Key Takeaways
+
+- Classical robotics relies on explicit mathematical models and expert knowledge
+- Forward kinematics is straightforward, but is viable only in quite simple scenarios. Inverse kinematics is more general, but it can be challenging to develop in practice  
+- Differential kinematics works with velocities rather than positions for better control
+- Classical approaches struggle with integration, scalability, modeling accuracy, and data utilization
+- Learning-based methods offer solutions to these fundamental limitations
+- The future lies in hybrid approaches that combine classical insights with learning capabilities
+
+> [!TIP]
+> Up next, we'll show how learning-based methods (reinforcement learning and imitation learning) absorb some of this complexity by optimizing directly from data.
+
+## References
+
+For a full list of references, check out the [tutorial](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Feedback Systems: An Introduction for Scientists and Engineers** (2008)  
+  Karl Johan Åström and Richard M. Murray  
+  A comprehensive introduction to feedback control systems, covering the principles that underlie closed-loop control in robotics.  
+  [Book Website](http://www.cds.caltech.edu/~murray/amwiki/index.php/Main_Page)
+
+- **Real-Time Obstacle Avoidance for Manipulators and Mobile Robots** (1986)  
+  Oussama Khatib  
+  A seminal paper introducing the artificial potential field method for obstacle avoidance, demonstrating how feedback can be used for reactive control in dynamic environments.  
+  [DOI:10.1177/027836498600500106](https://doi.org/10.1177/027836498600500106)
+

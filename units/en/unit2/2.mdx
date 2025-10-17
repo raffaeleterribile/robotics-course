@@ -1,0 +1,52 @@
+# Types of Robot Motion
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="Robotics Platforms" style="width: 70%;" />
+
+Different kinds of motions require very different robotic platforms. From left to right, top to bottom: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas.
+
+In this section, we'll organize the space of robot behaviors so you can quickly recognize what kind of problem you're solving and pick appropriate tools.
+
+Most robotics involves creating motion by controlling joints that connect rigid links. The key distinction between different areas of robotics comes down to what the robot is trying to change: the world around it, its own position in the world, or both.
+
+Most problems fall into one of three categories:
+
+**Manipulation** involves the robot changing the environment around it while staying in a fixed location. The robot acts on the world - grasping objects, assembling parts, or using tools. Think of a factory robot arm that picks up parts and puts them together.
+
+**Locomotion** involves the robot changing its position in the environment. This includes wheeled robots (like mobile bases and autonomous cars) and legged robots (like walking robots and quadrupeds) that move through their environment.
+
+**Mobile Manipulation** combines both capabilities, creating systems that can both move through their environment and manipulate objects. These problems are more complex because they need to coordinate many more control variables than either locomotion or manipulation alone.
+
+<!-- TODO: Diagram: three side-by-side boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 examples each (e.g., pick-and-place; quadruped walking; mobile base with arm). Include typical observations (RGB, depth, proprioception) and action spaces (joint velocities vs base velocity). -->
+
+> [!TIP]
+> Quick rule of thumb: ask "what changes most?" If mainly the world (object pose/state) changes, it's manipulation. If mainly the robot pose changes, it's locomotion. If both change in a tightly coupled way, it's mobile manipulation. Use this to decide sensors to log and the action space to predict.
+
+Recently, the development of low-cost manipulators like the ALOHA, ALOHA-2 and SO-100/SO-101 platforms significantly lowered the barrier to entry to robotics, considering the increased accessibility of these robots compared to more traditional platforms like the Franka Emika Panda arm.
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-cost-accessibility.png" alt="Robot Cost Comparison" style="width: 40%;" />
+
+Cheaper, more accessible robots are starting to rival traditional platforms like the Panda arm platforms in adoption in resource-constrained scenarios. The SO-100, in particular, has a cost in the 100s of Euros, and can be entirely 3D-printed in hours, while the industrially-manufactured Panda arm costs tens of thousands of Euros and is not openly available.
+
+The traditional body of work developed since the very inception of robotics is increasingly complemented by learning-based approaches. ML has indeed proven particularly transformative across the entire robotics stack, first empowering planning-based techniques with improved state estimation used for traditional planning and then end-to-end replacing controllers, effectively yielding perception-to-action methods.
+
+While explicit models have proven fundamental in achieving important milestones towards the development of modern robotics, recent works leveraging implicit models proved particularly promising in surpassing scalability and applicability challenges via learning.
+
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/classical-vs-robot-learning.png"  
+     alt="Classical vs Robot Learning"  
+     width="600" height="200">  
+
+We'll reuse this taxonomy in later units when we discuss datasets (modalities to record) and policies (what action chunks to predict) for each category.
+
+## References
+
+For a full list of references, check out the [tutorial](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **ALOHA 2: An Enhanced Low-Cost Hardware for Bimanual Teleoperation** (2024)  
+  Jorge Aldaco et al.  
+  This paper describes advances in accessible manipulation platforms, demonstrating how low-cost hardware enables research across manipulation tasks.  
+  [Project Page](https://aloha-2.github.io/)
+
+- **Learning Agile and Dynamic Motor Skills for Legged Robots** (2019)  
+  Joonho Hwangbo et al.  
+  A key paper demonstrating learning-based approaches to locomotion, showing how reinforcement learning can enable quadrupedal robots to perform complex dynamic movements.  
+  [arXiv:1901.08652](https://huggingface.co/papers/1901.08652)

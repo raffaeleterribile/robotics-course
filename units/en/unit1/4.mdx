@@ -1,0 +1,467 @@
+# Code Example: Datasets, in practice
+
+This section shows you how to work with robotics datasets from Hugging Face using the LeRobotDataset class. We'll start with simple examples and gradually add complexity, so you can copy and adapt the approach that best fits your project.
+
+The key thing to understand is that any dataset on the Hub that follows LeRobot's format (with tabular data, visual data, and metadata included) can be loaded with just one line of code.
+
+When working with robotics data, you often need to look at multiple time steps at once rather than single data points. Why? Most robot learning algorithms need to see how things change over time. For example, to pick up an object, a robot might need to see what happened in the last few moments to understand the current situation better. Similarly, many algorithms work better when they can plan several actions ahead rather than just deciding what to do right now.
+
+LeRobotDataset makes this easy with "temporal windowing." You simply declare which time offsets you want (i.e. current frame plus the two previous ones), and it automatically handles the complexity of getting those frames, even when some might be missing at the beginning or end of an episode.
+
+![streaming-multiple-frames](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/lerobotdataset-v3/streaming-multiple-frames.png)
+
+> [!TIP]
+> **Temporal Windows Explained:** 
+> - **Observation history**: `[-0.2, -0.1, 0.0]` gives you 200ms, 100ms, and current observations
+> - **Action sequences**: `[0.0, 0.1, 0.2]` provides current and next 2 actions (100ms apart)
+> - **Automatic padding**: Missing frames at episode boundaries are handled automatically. The datasets always returns the requested number of frames, and it applies padding where necessary.
+> - **Mask included**: Know which frames are real vs. padded for proper training
+
+Conveniently, by using LeRobotDataset with a PyTorch `DataLoader` one can automatically collate the individual sample dictionaries from the dataset into a single dictionary of batched tensors for downstream training or inference. LeRobotDataset also natively supports streaming mode for datasets. Users can stream data of a large dataset hosted on the Hugging Face Hub, with a one-line change in their implementation. Streaming datasets supports high-performance batch processing (ca. 80-100 it/s, varying on connectivity) and high levels of frames randomization, key features for practical BC algorithms which otherwise may be slow or operating on highly non-i.i.d. data. This feature is designed to improve on accessibility so that large datasets can be processed by users without requiring large amounts of memory and storage.
+
+Here are different ways to set up temporal windows depending on your use case. Skim the options and pick one to start—switching later is just a change to the dictionary.
+
+<hfoptions id="temporal-windows">
+<hfoption id="basic-bc">
+
+**Basic Behavioral Cloning** (learn current action from current observation):
+
+```python
+# Simple: current observation → current action
+delta_timestamps = {
+    "observation.images.wrist_camera": [0.0],  # Just current frame
+    "action": [0.0]  # Just current action
+}
+
+dataset = LeRobotDataset(
+    "lerobot/svla_so101_pickplace", 
+    delta_timestamps=delta_timestamps
+)
+```
+
+</hfoption>
+<hfoption id="history-bc">
+
+**History-Based BC** (use observation history for better decisions):
+
+```python
+# Use observation history for context
+delta_timestamps = {
+    "observation.images.wrist_camera": [-0.2, -0.1, 0.0],  # 200ms history
+    "action": [0.0]  # Current action
+}
+
+dataset = LeRobotDataset(
+    "lerobot/svla_so101_pickplace",
+    delta_timestamps=delta_timestamps
+)
+
+sample = dataset[100]
+# Images shape: [3, C, H, W] - 3 historical frames
+# Action shape: [action_dim] - single current action
+```
+
+</hfoption>
+<hfoption id="action-chunking">
+
+**Action Chunking** (predict action sequences for smoother control):
+
+```python
+# Predict multiple future actions at once
+delta_timestamps = {
+    "observation.images.wrist_camera": [-0.1, 0.0],  # Recent + current
+    "action": [0.0, 0.1, 0.2, 0.3]  # Current + 3 future actions
+}
+
+dataset = LeRobotDataset(
+    "lerobot/svla_so101_pickplace",
+    delta_timestamps=delta_timestamps
+)
+
+sample = dataset[100] 
+# Images shape: [2, C, H, W] - 2 observation frames
+# Action shape: [4, action_dim] - 4 action predictions
+```
+
+</hfoption>
+</hfoptions>
+
+### Streaming Large Datasets
+
+> [!TIP]
+> **When to use streaming:**
+> - **Dataset > available storage** - Stream datasets that don't fit on your disk
+> - **Experimentation** - Quickly try different datasets without downloading
+> - **Cloud training** - Reduce startup time by streaming from Hugging Face Hub
+> - **Network available** - Requires stable internet connection during training
+>
+> **Performance:** Streaming achieves 80-100 it/s with good connectivity! That is (on average) comparable with locally-stored datasets, factoring out initialization overhead.
+
+<hfoptions id="dataset-loading">
+<hfoption id="download">
+
+**Download Dataset** (faster training, requires storage):
+
+```python
+from lerobot.datasets.lerobot_dataset import LeRobotDataset
+
+# Downloads dataset to local cache
+dataset = LeRobotDataset("lerobot/svla_so101_pickplace")
+
+# Fastest access after download
+sample = dataset[100]
+```
+
+</hfoption>
+<hfoption id="streaming">
+
+**Stream Dataset** (no storage needed, requires internet):
+
+```python
+from lerobot.datasets.streaming_dataset import StreamingLeRobotDataset
+
+# Stream data without downloading
+streaming_dataset = StreamingLeRobotDataset(
+    "lerobot/svla_so101_pickplace",
+    delta_timestamps=delta_timestamps
+)
+
+# Works exactly like regular dataset
+sample = streaming_dataset[100]
+```
+
+</hfoption>
+</hfoptions>
+
+## Training Integration
+
+You can easily integrate regular and streaming datasets with torch data loaders. This makes integrating any LeRobotDataset with your own (`torch`) training loop rather convenient. Because we fetch all frames from the datasets as a tensor, wrapping iterating over a dataset with training is particularly straightforward.  
+
+### PyTorch DataLoader
+You can easily integrate regular and streaming datasets with torch data loaders. This makes integrating any LeRobotDataset with your own (`torch`) training loop rather convenient. Because we fetch all frames from the datasets as a tensor, wrapping iterating over a dataset with training is particularly straightforward.
+```python
+import torch
+from torch.utils.data import DataLoader
+# Create DataLoader for training
+dataloader = DataLoader(
+    dataset,
+    batch_size=16,
+    shuffle=True,
+    num_workers=4
+)
+
+# Training loop
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+for batch in dataloader:
+    # Move to device
+    observations = batch["observation.state"].to(device)
+    actions = batch["action"].to(device)
+    images = batch["observation.images.wrist_camera"].to(device)
+    
+    # Your model training here
+    # loss = model(observations, images, actions)
+    # loss.backward()
+    # optimizer.step()
+```
+## Why This Matters
+
+This simple API hides significant complexity:
+- ✅ **Multi-modal synchronization** - Images and sensors perfectly aligned
+- ✅ **Efficient storage** - Compressed videos, memory-mapped arrays
+- ✅ **Temporal handling** - Easy access to observation/action sequences  
+- ✅ **Scalability** - Same code works for small and massive datasets
+
+Compare this to traditional robotics data handling, which often requires:
+- Custom parsers for each data format
+- Manual synchronization across modalities
+- Complex buffering for temporal windows
+- Platform-specific loading code
+
+LeRobotDataset **standardizes and simplifies** all of this!
+
+<!-- TODO: Small table comparing "Traditional" vs "LeRobotDataset" (parsers, sync, buffering, platform code). -->
+
+
+## Section Quiz
+
+Test your understanding of LeRobot and its role in robot learning:
+
+### 1. What makes LeRobot different from traditional robotics libraries?
+
+<Question
+	choices={[
+		{
+			text: "It only works with simulation environments.",
+			explain: "LeRobot actually focuses on real-world robots and supports many physical platforms."
+		},
+		{
+			text: "It provides end-to-end integration across the entire robotics stack with state-of-the-art learning algorithms.",
+			explain: "LeRobot's key innovation is combining hardware control, data handling, and learning algorithms in one unified library.",
+            correct: true
+		},
+		{
+			text: "It requires expensive industrial robots to function.",
+			explain: "LeRobot focuses on accessible, low-cost robots to democratize robotics."
+		},
+        {
+			text: "It only supports classical control methods.",
+			explain: "LeRobot specifically focuses on learning-based approaches, not classical control."
+		}
+	]}
+/>
+
+### 2. Which of the following is NOT a key component of LeRobot's approach?
+
+<Question
+	choices={[
+		{
+			text: "Unified low-level robot configuration handling",
+			explain: "This is indeed a key component that enables cross-platform compatibility."
+		},
+		{
+			text: "Native robotics dataset format (LeRobotDataset)",
+			explain: "LeRobotDataset is a central innovation of the library."
+		},
+		{
+			text: "Requiring expert knowledge for each new robot platform",
+			explain: "This is actually what LeRobot aims to eliminate - it reduces the expertise barrier.",
+            correct: true
+		},
+        {
+			text: "State-of-the-art learning algorithms with PyTorch implementations",
+			explain: "SOTA algorithms are a core feature of LeRobot."
+		}
+	]}
+/>
+
+### 3. What is the main advantage of LeRobot's optimized inference stack?
+
+<Question
+	choices={[
+		{
+			text: "It makes training faster on GPUs.",
+			explain: "The inference stack is about deployment, not training speed."
+		},
+		{
+			text: "It reduces the memory requirements for storing datasets.",
+			explain: "Memory reduction is handled by the dataset format, not the inference stack."
+		},
+		{
+			text: "It decouples action planning from action execution for better real-time performance.",
+			explain: "This separation is crucial for real-time robot control where millisecond delays matter.",
+            correct: true
+		},
+        {
+			text: "It automatically generates training data from robot interactions.",
+			explain: "Data generation is not handled by the inference stack."
+		}
+	]}
+/>
+
+### 4. Which types of robotic platforms does LeRobot support?
+
+<Question
+	choices={[
+		{
+			text: "Only manipulation robots like robotic arms.",
+			explain: "LeRobot supports much more than just manipulation platforms."
+		},
+		{
+			text: "Manipulation, locomotion, and whole-body control platforms.",
+			explain: "LeRobot supports the full spectrum of robotic platforms, from simple arms to complex humanoids.",
+            correct: true
+		},
+		{
+			text: "Only robots that cost more than $10,000.",
+			explain: "LeRobot focuses on accessible, low-cost platforms to democratize robotics."
+		},
+        {
+			text: "Only robots manufactured by specific companies.",
+			explain: "LeRobot supports open-source and accessible robots from various sources."
+		}
+	]}
+/>
+
+### 5. What does "end-to-end integration with the robotics stack" mean in the context of LeRobot?
+
+<Question
+	choices={[
+		{
+			text: "It only handles high-level planning, not low-level control.",
+			explain: "End-to-end means it covers everything from low-level control to high-level algorithms."
+		},
+		{
+			text: "It covers everything from low-level hardware control to high-level learning algorithms.",
+			explain: "This comprehensive coverage eliminates the need to integrate multiple separate tools.",
+            correct: true
+		},
+		{
+			text: "It requires separate tools for data handling and model training.",
+			explain: "End-to-end integration means you don't need separate tools - everything is unified."
+		},
+        {
+			text: "It only works with specific operating systems.",
+			explain: "Platform integration refers to robotics components, not operating systems."
+		}
+	]}
+/>
+
+### 6. What is the primary purpose of the `delta_timestamps` parameter in LeRobotDataset?
+
+<Question
+	choices={[
+		{
+			text: "It sets the frame rate for video recording.",
+			explain: "Frame rates are stored in metadata, not controlled by delta_timestamps."
+		},
+		{
+			text: "It defines temporal windows to access observation histories and action sequences.",
+			explain: "delta_timestamps allows you to specify which time offsets to include, enabling access to past observations and future actions.",
+            correct: true
+		},
+		{
+			text: "It synchronizes data across different robots.",
+			explain: "Synchronization across robots is not handled by delta_timestamps."
+		},
+        {
+			text: "It compresses video data for storage efficiency.",
+			explain: "Video compression is handled separately in the dataset storage format."
+		}
+	]}
+/>
+
+### 7. Which of the following best describes the three main components of LeRobotDataset?
+
+<Question
+	choices={[
+		{
+			text: "Images, Actions, and Rewards",
+			explain: "While these are important data types, they don't describe the architectural components."
+		},
+		{
+			text: "Tabular Data, Visual Data, and Metadata",
+			explain: "These are the three architectural pillars: efficient storage for sensor data, compressed videos, and JSON metadata files.",
+            correct: true
+		},
+		{
+			text: "Training, Validation, and Test sets",
+			explain: "These are data splits, not the architectural components of the format."
+		},
+        {
+			text: "Simulation, Real Robot, and Hybrid data",
+			explain: "These describe data sources, not the storage architecture."
+		}
+	]}
+/>
+
+### 8. What happens when you use `StreamingLeRobotDataset` instead of `LeRobotDataset`?
+
+<Question
+	choices={[
+		{
+			text: "The data is automatically augmented for better training.",
+			explain: "Streaming doesn't involve data augmentation - that's a separate preprocessing step."
+		},
+		{
+			text: "The dataset is downloaded faster to your local machine.",
+			explain: "Streaming actually avoids downloading the dataset entirely."
+		},
+		{
+			text: "Data is streamed from the Hugging Face Hub without downloading, saving storage space.",
+			explain: "StreamingLeRobotDataset allows you to process large datasets without downloading them locally.",
+            correct: true
+		},
+        {
+			text: "The dataset is automatically split into train/validation sets.",
+			explain: "Data splitting is independent of the streaming vs download choice."
+		}
+	]}
+/>
+
+### 9. In the context of robot learning, what does "temporal windowing" refer to?
+
+<Question
+	choices={[
+		{
+			text: "The time it takes to train a robot learning model.",
+			explain: "Training time is not what temporal windowing refers to."
+		},
+		{
+			text: "Accessing multiple time steps of observations and actions around a given frame.",
+			explain: "Temporal windowing allows algorithms to use observation history and action sequences, crucial for robot learning.",
+            correct: true
+		},
+		{
+			text: "The frequency at which robot sensors collect data.",
+			explain: "Sensor frequency is separate from temporal windowing in datasets."
+		},
+        {
+			text: "The duration of each robot episode or trajectory.",
+			explain: "Episode duration is different from temporal windowing within episodes."
+		}
+	]}
+/>
+
+### 10. What is the main advantage of LeRobotDataset's approach to storing video data?
+
+<Question
+	choices={[
+		{
+			text: "Videos are stored in the highest possible quality.",
+			explain: "Quality isn't the main focus - efficiency and scalability are."
+		},
+		{
+			text: "Each frame is stored as a separate file for easy access.",
+			explain: "This would actually be inefficient - LeRobotDataset does the opposite."
+		},
+		{
+			text: "Multiple episodes are concatenated into larger MP4 files to reduce file system stress.",
+			explain: "This approach dramatically reduces the number of files, making storage more efficient for large datasets.",
+            correct: true
+		},
+        {
+			text: "Videos are automatically compressed using AI algorithms.",
+			explain: "Standard video compression is used, not AI-based compression."
+		}
+	]}
+/>
+
+### 11. Which statement about LeRobotDataset's compatibility is correct?
+
+<Question
+	choices={[
+		{
+			text: "It only works with specific robot brands like SO-100.",
+			explain: "LeRobotDataset is designed to work across many different robot platforms."
+		},
+		{
+			text: "It requires custom code for each new robot platform.",
+			explain: "The unified format reduces the need for custom code per platform."
+		},
+		{
+			text: "It integrates seamlessly with PyTorch DataLoader and Hugging Face ecosystems.",
+			explain: "This integration makes it easy to use robotics data with existing ML workflows.",
+            correct: true
+		},
+		{
+			text: "It only supports simulation data, not real robot data.",
+			explain: "LeRobotDataset supports both simulation and real robot data."
+		}
+	]}
+/>
+
+## References
+
+For a full list of references, check out the [tutorial](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Diffusion Policy: Visuomotor Policy Learning via Action Diffusion** (2024)  
+  Cheng Chi et al.  
+  This paper introduces diffusion models for robot policy learning and discusses how temporal windowing and action chunking enable smooth visuomotor control.  
+  [arXiv:2303.04137](https://huggingface.co/papers/2303.04137)
+
+- **RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control** (2023)  
+  Anthony Brohan et al.  
+  Demonstrates how vision-language models can be fine-tuned for robotic control, including discussion of temporal context windows and action prediction horizons.  
+  [arXiv:2307.15818](https://huggingface.co/papers/2307.15818)
+
