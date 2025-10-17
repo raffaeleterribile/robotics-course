@@ -4,8 +4,6 @@
     title: Welcome to the Robotics Course
   - local: unit0/2
     title: Getting Started with LeRobot
-  - local: unit0/3
-    title: Robotics Hardware
 
 - title: "1. Course Introduction"
   sections:
