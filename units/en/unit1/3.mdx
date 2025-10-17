@@ -19,7 +19,7 @@ It is extensible and customizable, and already supports openly available data ac
 
 The format is built to be efficient for training and flexible enough to accommodate diverse data types, while promoting reproducibility and ease of use.
 
-![](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/item-from-dataset.png)
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/item-from-dataset.png" alt="Item from dataset">
 
 ## The Dataset Class Design
 
@@ -39,7 +39,7 @@ As you browse a dataset on disk, keep these three buckets in mind—they explain
 
 For scalability, and to support datasets with potentially millions of trajectories (resulting in hundreds of millions or billions of individual camera frames), we merge data from different episodes into the same high-level structure.
 
-Concretely, a single parquet or MP4 often contains multiple episodes. This limits the number of files and speeds up I/O. The trade‑off is that metadata becomes the “map” that tells you where each episode begins and ends. In turn, metadata have a much more "relational" function, similar to how way in a relational database, shared keys allow to retrieve information from multiple tables.
+Concretely, a single data file (stored with a parquet file) or recording (stored in MP4 format) often contains multiple episodes. This limits the number of files and speeds up I/O. The trade‑off is that metadata becomes the “map” that tells you where each episode begins and ends. In turn, metadata have a much more "relational" function, similar to how way in a relational database, shared keys allow to retrieve information from multiple tables.
 
 An example structure for a given LeRobotDataset would appear as follows:
 
