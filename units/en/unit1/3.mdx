@@ -56,3 +56,17 @@ Reading guide: start with `meta/info.json` to understand the schema and fps; the
 > **Storage Efficiency:** By concatenating episodes into larger files, LeRobotDataset avoids the "small files problem" that can slow down filesystems. A dataset with 1M episodes might have only hundreds of actual files on disk!
 >
 > **Pro Tip:** The metadata files act like a database index, allowing fast access to specific episodes without loading entire video files.
+
+## References
+
+For a full list of references, check out the [tutorial](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Implicit Behavioral Cloning** (2022)  
+  Pete Florence et al.  
+  This paper introduces energy-based models for behavioral cloning, demonstrating how implicit models can handle multi-modal action distributions more effectively than explicit models—a key consideration when designing dataset formats for robot learning.  
+  [Paper (CoRL 2022)](https://proceedings.mlr.press/v164/florence22a.html)
+
+- **A Dataset for Interactive Vision-Language Navigation with Unknown Command Feasibility** (2022)  
+  Various Authors  
+  An example of how specialized dataset formats enable new capabilities in robot learning, particularly for handling multi-modal sensory data and episodic structure.  
+  [arXiv:2202.02312](https://huggingface.co/papers/2202.02312)
